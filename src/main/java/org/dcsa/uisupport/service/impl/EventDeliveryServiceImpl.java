@@ -1,6 +1,8 @@
 package org.dcsa.uisupport.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.dcsa.core.events.model.Event;
+import org.dcsa.core.events.repository.EventRepository;
 import org.dcsa.core.service.impl.ExtendedBaseServiceImpl;
 import org.dcsa.uisupport.model.AttemptedEventDelivery;
 import org.dcsa.uisupport.model.EventDelivery;
@@ -8,7 +10,9 @@ import org.dcsa.uisupport.model.PendingEvent;
 import org.dcsa.uisupport.model.enums.EventDeliveryStatus;
 import org.dcsa.uisupport.repository.EventDeliveryRepository;
 import org.dcsa.uisupport.service.EventDeliveryService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -19,6 +23,7 @@ import java.util.UUID;
 public class EventDeliveryServiceImpl extends ExtendedBaseServiceImpl<EventDeliveryRepository, EventDelivery, UUID>
         implements EventDeliveryService {
     private final EventDeliveryRepository eventDeliveryRepository;
+    private final EventRepository eventRepository;
 
     @Override
     public EventDeliveryRepository getRepository() {
@@ -30,7 +35,6 @@ public class EventDeliveryServiceImpl extends ExtendedBaseServiceImpl<EventDeliv
         Mono<EventDelivery> unmappedEventDelivery = eventDeliveryRepository
                 .findUnmappedEventByEventId(eventID)
                 .map(event -> pendingDelivery());
-
         Mono<EventDelivery> pendingEventDelivery = eventDeliveryRepository
                 .findPendingEventByEventId(eventID)
                 .map(event -> {
@@ -39,10 +43,13 @@ public class EventDeliveryServiceImpl extends ExtendedBaseServiceImpl<EventDeliv
                     }
                     return attemptedEventDelivery(event);
                 });
-
-        return Flux.merge(pendingEventDelivery, unmappedEventDelivery)
+        Mono<EventDelivery> mappedEventDelivery = Flux.merge(pendingEventDelivery, unmappedEventDelivery)
                 .switchIfEmpty(finishedDelivery())
                 .next();
+
+        return eventRepository.findById(eventID)
+                .flatMap(e -> mappedEventDelivery)
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
 
     private AttemptedEventDelivery attemptedEventDelivery(PendingEvent pendingEvent) {
