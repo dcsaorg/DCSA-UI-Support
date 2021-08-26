@@ -24,10 +24,5 @@ public class EventDeliveryController extends ExtendedBaseController<EventDeliver
         return eventDeliveryService;
     }
 
-    @Override
-    @GetMapping(value = "{eventID}")
-    @ResponseStatus(HttpStatus.OK)
-    public Mono<EventDelivery> findById(@PathVariable UUID eventID) {
-        return getService().findById(eventID);
     }
 }
