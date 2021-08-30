@@ -71,13 +71,3 @@ logging:
     org:
       springframework:
         r2dbc: INFO
-
-management:
-  endpoint:
-    health:
-      probes:
-        enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: health
