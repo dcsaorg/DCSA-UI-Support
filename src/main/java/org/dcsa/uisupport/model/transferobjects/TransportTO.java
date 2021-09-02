@@ -30,10 +30,4 @@ public class TransportTO extends Transport {
   @ForeignKey(fromFieldName = "vesselIMONumber", foreignFieldName = "vesselIMONumber")
   private Vessel vessel;
 
-  public void setVessel(Vessel vessel) {
-    if (vessel != null) {
-      this.setVesselIMONumber(vessel.getVesselIMONumber());
-    }
-    this.vessel = vessel;
-  }
 }

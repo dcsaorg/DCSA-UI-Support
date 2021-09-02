@@ -5,6 +5,7 @@ import org.dcsa.core.controller.ExtendedBaseController;
 import org.dcsa.core.events.model.Vessel;
 import org.dcsa.core.events.service.VesselService;
 import org.dcsa.core.exception.CreateException;
+import org.dcsa.core.validator.ValidVesselIMONumber;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class VesselController extends ExtendedBaseController<VesselService, Vess
   @Override
   @GetMapping(value = "{vesselIMONumber}")
   @ResponseStatus(HttpStatus.OK)
-  public Mono<Vessel> findById(@PathVariable String vesselIMONumber) {
+  public Mono<Vessel> findById(@PathVariable @ValidVesselIMONumber String vesselIMONumber) {
     return getService().findById(vesselIMONumber);
   }
 
@@ -47,7 +48,7 @@ public class VesselController extends ExtendedBaseController<VesselService, Vess
   @PutMapping(path = "{vesselIMONumber}")
   @ResponseStatus(HttpStatus.OK)
   public Mono<Vessel> update(
-      @PathVariable String vesselIMONumber, @Valid @RequestBody Vessel vessel) {
+          @PathVariable @ValidVesselIMONumber String vesselIMONumber, @Valid @RequestBody Vessel vessel) {
     if (!vesselIMONumber.equals(vesselService.getIdOfEntity(vessel))) {
       return updateMonoError();
     }
@@ -63,7 +64,7 @@ public class VesselController extends ExtendedBaseController<VesselService, Vess
 
   @DeleteMapping(path = "{vesselIMONumber}")
   @ResponseStatus(HttpStatus.FORBIDDEN)
-  public Mono<Void> deleteById(@PathVariable String vesselIMONumber) {
+  public Mono<Void> deleteById(@PathVariable @ValidVesselIMONumber String vesselIMONumber) {
     return Mono.error(new ResponseStatusException(HttpStatus.FORBIDDEN));
   }
 }
