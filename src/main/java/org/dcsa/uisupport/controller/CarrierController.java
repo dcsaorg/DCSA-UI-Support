@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(
-    value = "unofficial-carriers",
+    value = "unofficial/carriers",
     produces = {MediaType.APPLICATION_JSON_VALUE})
 @RequiredArgsConstructor
 public class CarrierController extends ExtendedBaseController<CarrierService, Carrier, UUID> {

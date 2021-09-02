@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(
-    value = "unofficial-transports",
+    value = "unofficial/transports",
     produces = {MediaType.APPLICATION_JSON_VALUE})
 @RequiredArgsConstructor
 public class TransportTOController

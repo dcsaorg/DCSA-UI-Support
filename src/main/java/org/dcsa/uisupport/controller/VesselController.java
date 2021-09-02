@@ -15,7 +15,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(
-    value = "unofficial-vessels",
+    value = "unofficial/vessels",
     produces = {MediaType.APPLICATION_JSON_VALUE})
 @RequiredArgsConstructor
 public class VesselController extends ExtendedBaseController<VesselService, Vessel, String> {
