@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(
-        value = "unofficial-event-delivery-status",
+        value = "unofficial/event-delivery-status",
         produces = {MediaType.APPLICATION_JSON_VALUE})
 @RequiredArgsConstructor
 public class EventDeliveryController extends ExtendedBaseController<EventDeliveryService, EventDelivery, UUID> {
