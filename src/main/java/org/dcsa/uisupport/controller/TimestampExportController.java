@@ -50,7 +50,6 @@ public class TimestampExportController {
             .column("Transport Mode", oe -> mapTransportCall(oe, TransportCallTO::getModeOfTransport))
             .column("Facility Location", oe -> mapTransportCall(oe, TransportCallTO::getUNLocationCode))
             .column("Terminal Code", oe -> mapTransportCall(oe, TransportCallTO::getFacilityCode))
-            .column("Terminal Code List Provider", oe -> mapTransportCall(oe, TransportCallTO::getFacilityCodeListProvider))
             .column("Facility type code", OperationsEvent::getFacilityTypeCode)
             .column("Port Call Service type code", (oe) -> mapOrDefault(oe, OperationsEvent::getPortCallServiceTypeCode, "<null>"))
             .column("Event Classifier code", OperationsEvent::getEventClassifierCode)
