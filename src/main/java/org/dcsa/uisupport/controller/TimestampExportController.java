@@ -39,6 +39,7 @@ public class TimestampExportController {
     private final DataExportDefinition<OperationsEvent> dataExportDefinition = DataExportDefinition.<OperationsEvent>builder()
             .column("Publisher SMDG code", (oe) -> null) // TODO <--
             .column("Publisher Role", OperationsEvent::getPublisherRole)
+            .column("Publisher Name", oe -> oe.getPublisher().getPartyName())
             .column("Vessel Name", oe -> mapVessel(oe, Vessel::getVesselName))
             .column("Vessel IMO", oe -> mapVessel(oe, v -> Integer.parseInt(v.getVesselIMONumber())))
             .column("Vessel location lat", oe -> mapVesselLocation(oe, LocationTO::getLatitude))
