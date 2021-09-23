@@ -40,12 +40,12 @@ public class TimestampExportController {
     private final R2dbcDialect r2dbcDialect;
     private final static Set<Class<? extends Event>> OPERATIONS_EVENT_TYPE = Set.of(OperationsEvent.class);
     private final DataExportDefinition<OperationsEvent> dataExportDefinition = DataExportDefinition.<OperationsEvent>builder()
-            .column("Publisher SMDG code", oe -> oe.getPublisher().getIdentifyingCodes().stream()
+            .column("Publisher SMDG code", oe -> mapPublisher(oe, p -> p.getIdentifyingCodes().stream()
                     .filter(idc -> idc.getCodeListResponsibleAgencyCode().equals(CodeListResponsibleAgency.SMDG.getCode()))
                     .map(PartyTO.IdentifyingCode::getPartyCode)
-                    .collect(Collectors.toList()))
+                    .collect(Collectors.toList())))
             .column("Publisher Role", OperationsEvent::getPublisherRole)
-            .column("Publisher Name", oe -> oe.getPublisher().getPartyName())
+            .column("Publisher Name", oe -> mapPublisher(oe, PartyTO::getPartyName))
             .column("Vessel Name", oe -> mapVessel(oe, Vessel::getVesselName))
             .column("Vessel IMO", oe -> mapVessel(oe, v -> Integer.parseInt(v.getVesselIMONumber())))
             .column("Vessel location lat", oe -> mapVesselLocation(oe, LocationTO::getLatitude))
@@ -137,6 +137,14 @@ public class TimestampExportController {
         LocationTO location = oe.getEventLocation();
         if (location != null) {
             return mapper.apply(location);
+        }
+        return null;
+    }
+
+    private Object mapPublisher(OperationsEvent oe, Function<PartyTO, ?> mapper) {
+        PartyTO publisher = oe.getPublisher();
+        if (publisher != null) {
+            return mapper.apply(publisher);
         }
         return null;
     }
