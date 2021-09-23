@@ -5,8 +5,10 @@ import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.dcsa.core.events.model.Event;
 import org.dcsa.core.events.model.OperationsEvent;
 import org.dcsa.core.events.model.Vessel;
+import org.dcsa.core.events.model.enums.CodeListResponsibleAgency;
 import org.dcsa.core.events.model.enums.FacilityTypeCode;
 import org.dcsa.core.events.model.transferobjects.LocationTO;
+import org.dcsa.core.events.model.transferobjects.PartyTO;
 import org.dcsa.core.events.model.transferobjects.TransportCallTO;
 import org.dcsa.core.events.util.ExtendedGenericEventRequest;
 import org.dcsa.core.extendedrequest.ExtendedParameters;
@@ -25,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "unofficial/export-timestamps")
@@ -37,7 +40,10 @@ public class TimestampExportController {
     private final R2dbcDialect r2dbcDialect;
     private final static Set<Class<? extends Event>> OPERATIONS_EVENT_TYPE = Set.of(OperationsEvent.class);
     private final DataExportDefinition<OperationsEvent> dataExportDefinition = DataExportDefinition.<OperationsEvent>builder()
-            .column("Publisher SMDG code", (oe) -> null) // TODO <--
+            .column("Publisher SMDG code", oe -> oe.getPublisher().getIdentifyingCodes().stream()
+                    .filter(idc -> idc.getCodeListResponsibleAgencyCode().equals(CodeListResponsibleAgency.SMDG.getCode()))
+                    .map(PartyTO.IdentifyingCode::getPartyCode)
+                    .collect(Collectors.toList()))
             .column("Publisher Role", OperationsEvent::getPublisherRole)
             .column("Publisher Name", oe -> oe.getPublisher().getPartyName())
             .column("Vessel Name", oe -> mapVessel(oe, Vessel::getVesselName))
