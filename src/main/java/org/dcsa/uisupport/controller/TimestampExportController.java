@@ -43,7 +43,7 @@ public class TimestampExportController {
             .column("Publisher SMDG code", oe -> mapPublisher(oe, p -> p.getIdentifyingCodes().stream()
                     .filter(idc -> idc.getCodeListResponsibleAgencyCode().equals(CodeListResponsibleAgency.SMDG.getCode()))
                     .map(PartyTO.IdentifyingCode::getPartyCode)
-                    .collect(Collectors.toList())))
+                    .collect(Collectors.joining(","))))
             .column("Publisher Role", OperationsEvent::getPublisherRole)
             .column("Publisher Name", oe -> mapPublisher(oe, PartyTO::getPartyName))
             .column("Vessel Name", oe -> mapVessel(oe, Vessel::getVesselName))
