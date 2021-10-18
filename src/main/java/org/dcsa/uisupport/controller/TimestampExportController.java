@@ -23,9 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -40,10 +38,11 @@ public class TimestampExportController {
     private final R2dbcDialect r2dbcDialect;
     private final static Set<Class<? extends Event>> OPERATIONS_EVENT_TYPE = Set.of(OperationsEvent.class);
     private final DataExportDefinition<OperationsEvent> dataExportDefinition = DataExportDefinition.<OperationsEvent>builder()
-            .column("Publisher SMDG code", oe -> mapPublisher(oe, p -> p.getIdentifyingCodes().stream()
-                    .filter(idc -> idc.getCodeListResponsibleAgencyCode().equals(CodeListResponsibleAgency.SMDG.getCode()))
-                    .map(PartyTO.IdentifyingCode::getPartyCode)
-                    .collect(Collectors.joining(","))))
+            .column("Publisher SMDG code", oe -> mapPublisher(oe, p ->
+                Objects.requireNonNullElseGet(p.getIdentifyingCodes(), Collections::<PartyTO.IdentifyingCode>emptyList).stream()
+                        .filter(idc -> idc.getCodeListResponsibleAgencyCode().equals(CodeListResponsibleAgency.SMDG.getCode()))
+                        .map(PartyTO.IdentifyingCode::getPartyCode)
+                        .collect(Collectors.joining(","))))
             .column("Publisher Role", OperationsEvent::getPublisherRole)
             .column("Publisher Name", oe -> mapPublisher(oe, PartyTO::getPartyName))
             .column("Vessel Name", oe -> mapVessel(oe, Vessel::getVesselName))
