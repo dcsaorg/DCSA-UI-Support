@@ -162,17 +162,13 @@ public class TimestampExportController {
         return builder.append("-NO_TC-").append(operationsEvent.getEventID());
     }
 
-    @GetMapping("/events")
-    public Flux<OperationsEvent> findAllEvents() {
-        ExtendedGenericEventRequest genericEventRequest = new ExtendedGenericEventRequest(extendedParameters, r2dbcDialect, OPERATIONS_EVENT_TYPE);
-        genericEventRequest.parseParameter(Map.of("eventType", List.of("OPERATIONS")));
-        return uiSupportEventService.findAllExtended(genericEventRequest).cast(OperationsEvent.class);
-    }
-
     @GetMapping
     public Mono<ResponseEntity<byte[]>> findAll() {
         ExtendedGenericEventRequest genericEventRequest = new ExtendedGenericEventRequest(extendedParameters, r2dbcDialect, OPERATIONS_EVENT_TYPE);
-        genericEventRequest.parseParameter(Map.of("eventType", List.of("OPERATIONS")));
+        genericEventRequest.parseParameter(
+                Map.of("eventType", List.of("OPERATIONS"),
+                        "limit", List.of("1000000"))
+        );
         return excelGenerator.generateExcel(
           "timestamps",
                 dataExportDefinition,
