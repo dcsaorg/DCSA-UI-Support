@@ -14,7 +14,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(
-        value = "unofficial/timestamp-definition",
+        value = "unofficial/timestamp-definitions",
         produces = {MediaType.APPLICATION_JSON_VALUE})
 @RequiredArgsConstructor
 public class TimestampDefinitionController extends ExtendedBaseController<TimestampDefinitionService, TimestampDefinition, String> {
