@@ -67,7 +67,7 @@ public class TimestampExportController {
             .column("Berth Location", oe -> isBerthRelatedTimestamp(oe)
                     ? mapEventLocation(oe, LocationTO::getLocationName)
                     : "N/A (wrong timestamp type)")
-            .column("Event Message", OperationsEvent::getTimestampTypeName)
+            .column("Event Message", oe -> "TODO")// OperationsEvent::getTimestampTypeName)
             .column("Event Timestamp", OperationsEvent::getEventDateTime)
             .column("Event created date time", OperationsEvent::getEventCreatedDateTime)
             //.column("Response time", oe -> "N/A")

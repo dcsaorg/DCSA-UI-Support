@@ -11,13 +11,16 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-@Table("event_delivery_status")
+@Table("ui_timestamp_info")
 @Data
-public class EventDelivery {
+public class UITimestampInfo {
 
     @Id
     @Column("event_id")
     private UUID eventID;
+
+    @Column("timestamp_definition")
+    private String timestampDefinition;
 
     @Column("event_delivery_status")
     private EventDeliveryStatus eventDeliveryStatus;

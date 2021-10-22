@@ -3,7 +3,7 @@ package org.dcsa.uisupport.controller;
 import lombok.RequiredArgsConstructor;
 import org.dcsa.core.controller.ExtendedBaseController;
 import org.dcsa.core.events.model.TimestampDefinition;
-import org.dcsa.uisupport.service.TimestampDefinitionService;
+import org.dcsa.core.events.service.TimestampDefinitionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
