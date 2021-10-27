@@ -13,26 +13,20 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(
     value = "unofficial/vessels",
     produces = {MediaType.APPLICATION_JSON_VALUE})
 @RequiredArgsConstructor
-public class VesselController extends ExtendedBaseController<VesselService, Vessel, String> {
+public class VesselController extends ExtendedBaseController<VesselService, Vessel, UUID> {
 
   private final VesselService vesselService;
 
   @Override
   public VesselService getService() {
     return vesselService;
-  }
-
-  @Override
-  @GetMapping(value = "{vesselIMONumber}")
-  @ResponseStatus(HttpStatus.OK)
-  public Mono<Vessel> findById(@PathVariable @ValidVesselIMONumber String vesselIMONumber) {
-    return getService().findById(vesselIMONumber);
   }
 
   @PostMapping
@@ -45,11 +39,11 @@ public class VesselController extends ExtendedBaseController<VesselService, Vess
     return vesselService.create(vessel);
   }
 
-  @PutMapping(path = "{vesselIMONumber}")
+  @PutMapping(path = "{id}")
   @ResponseStatus(HttpStatus.OK)
   public Mono<Vessel> update(
-          @PathVariable @ValidVesselIMONumber String vesselIMONumber, @Valid @RequestBody Vessel vessel) {
-    if (!vesselIMONumber.equals(vesselService.getIdOfEntity(vessel))) {
+          @PathVariable UUID id, @Valid @RequestBody Vessel vessel) {
+    if (!id.equals(vesselService.getIdOfEntity(vessel))) {
       return updateMonoError();
     }
     return vesselService.update(vessel);
@@ -62,9 +56,9 @@ public class VesselController extends ExtendedBaseController<VesselService, Vess
     return Mono.error(new ResponseStatusException(HttpStatus.FORBIDDEN));
   }
 
-  @DeleteMapping(path = "{vesselIMONumber}")
+  @DeleteMapping(path = "{id}")
   @ResponseStatus(HttpStatus.FORBIDDEN)
-  public Mono<Void> deleteById(@PathVariable @ValidVesselIMONumber String vesselIMONumber) {
+  public Mono<Void> deleteById(@PathVariable UUID id) {
     return Mono.error(new ResponseStatusException(HttpStatus.FORBIDDEN));
   }
 }
