@@ -5,7 +5,7 @@ import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.dcsa.core.events.model.Event;
 import org.dcsa.core.events.model.OperationsEvent;
 import org.dcsa.core.events.model.Vessel;
-import org.dcsa.core.events.model.enums.CodeListResponsibleAgency;
+import org.dcsa.core.events.model.enums.DCSAResponsibleAgencyCode;
 import org.dcsa.core.events.model.enums.FacilityTypeCode;
 import org.dcsa.core.events.model.transferobjects.LocationTO;
 import org.dcsa.core.events.model.transferobjects.PartyTO;
@@ -20,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
@@ -40,7 +39,7 @@ public class TimestampExportController {
     private final DataExportDefinition<OperationsEvent> dataExportDefinition = DataExportDefinition.<OperationsEvent>builder()
             .column("Publisher SMDG code", oe -> mapPublisher(oe, p ->
                 Objects.requireNonNullElseGet(p.getIdentifyingCodes(), Collections::<PartyTO.IdentifyingCode>emptyList).stream()
-                        .filter(idc -> idc.getCodeListResponsibleAgencyCode().equals(CodeListResponsibleAgency.SMDG.getCode()))
+                        .filter(idc -> idc.getDCSAResponsibleAgencyCode() == DCSAResponsibleAgencyCode.SMDG)
                         .map(PartyTO.IdentifyingCode::getPartyCode)
                         .collect(Collectors.joining(","))))
             .column("Publisher Role", OperationsEvent::getPublisherRole)
@@ -52,7 +51,8 @@ public class TimestampExportController {
             //.column("Rotation From", oe -> "N/A (data not available)")
             //.column("Rotation To", oe -> "N/A (data not available)")
             //.column("Direction", oe -> "N/A (data not available)")
-            .column("Carrier Voyage Number", oe -> mapTransportCall(oe, TransportCallTO::getCarrierVoyageNumber))
+            .column("Carrier Import Voyage Number", oe -> mapTransportCall(oe, TransportCallTO::getImportVoyageNumber))
+            .column("Carrier Export Voyage Number", oe -> mapTransportCall(oe, TransportCallTO::getExportVoyageNumber))
             .column("Transport Mode", oe -> mapTransportCall(oe, TransportCallTO::getModeOfTransport))
             .column("Facility Location", oe -> mapTransportCall(oe, TransportCallTO::getUNLocationCode))
             .column("Terminal Code", oe -> mapTransportCall(oe, TransportCallTO::getFacilityCode))
