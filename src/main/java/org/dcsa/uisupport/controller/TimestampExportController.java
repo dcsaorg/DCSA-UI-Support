@@ -4,23 +4,28 @@ import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.DataConsolidateFunction;
 import org.dcsa.core.events.model.Event;
 import org.dcsa.core.events.model.OperationsEvent;
+import org.dcsa.core.events.model.TimestampDefinition;
 import org.dcsa.core.events.model.Vessel;
 import org.dcsa.core.events.model.enums.DCSAResponsibleAgencyCode;
 import org.dcsa.core.events.model.enums.FacilityTypeCode;
 import org.dcsa.core.events.model.transferobjects.LocationTO;
 import org.dcsa.core.events.model.transferobjects.PartyTO;
 import org.dcsa.core.events.model.transferobjects.TransportCallTO;
+import org.dcsa.core.events.service.TimestampDefinitionService;
 import org.dcsa.core.events.util.ExtendedGenericEventRequest;
 import org.dcsa.core.extendedrequest.ExtendedParameters;
 import org.dcsa.uisupport.model.DataExportDefinition;
 import org.dcsa.uisupport.model.ExcelGenerator;
+import org.dcsa.uisupport.model.UITimestampInfo;
 import org.dcsa.uisupport.service.UISupportEventService;
+import org.dcsa.uisupport.service.UITimestampInfoService;
 import org.springframework.data.r2dbc.dialect.R2dbcDialect;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 
 import java.util.*;
 import java.util.function.Function;
@@ -32,49 +37,52 @@ import java.util.stream.Collectors;
 public class TimestampExportController {
 
     private final ExcelGenerator excelGenerator;
+    private final TimestampDefinitionService timestampDefinitionService;
     private final UISupportEventService uiSupportEventService;
+    private final UITimestampInfoService uiTimestampInfoService;
     private final ExtendedParameters extendedParameters;
     private final R2dbcDialect r2dbcDialect;
+
     private final static Set<Class<? extends Event>> OPERATIONS_EVENT_TYPE = Set.of(OperationsEvent.class);
-    private final DataExportDefinition<OperationsEvent> dataExportDefinition = DataExportDefinition.<OperationsEvent>builder()
-            .column("Publisher SMDG code", oe -> mapPublisher(oe, p ->
+    private final DataExportDefinition<Tuple2<OperationsEvent, TimestampDefinition>> dataExportDefinition = DataExportDefinition.<Tuple2<OperationsEvent, TimestampDefinition>>builder()
+            .column("Publisher SMDG code", Tuple2::getT1, oe -> mapPublisher(oe, p ->
                 Objects.requireNonNullElseGet(p.getIdentifyingCodes(), Collections::<PartyTO.IdentifyingCode>emptyList).stream()
                         .filter(idc -> idc.getDCSAResponsibleAgencyCode() == DCSAResponsibleAgencyCode.SMDG)
                         .map(PartyTO.IdentifyingCode::getPartyCode)
                         .collect(Collectors.joining(","))))
-            .column("Publisher Role", OperationsEvent::getPublisherRole)
-            .column("Publisher Name", oe -> mapPublisher(oe, PartyTO::getPartyName))
-            .column("Vessel Name", oe -> mapVessel(oe, Vessel::getVesselName))
-            .column("Vessel IMO", oe -> mapVessel(oe, v -> Integer.parseInt(v.getVesselIMONumber())))
-            .column("Vessel location lat", oe -> mapVesselLocation(oe, LocationTO::getLatitude))
-            .column("Vessel location long", oe -> mapVesselLocation(oe, LocationTO::getLongitude))
+            .column("Publisher Role", Tuple2::getT1, OperationsEvent::getPublisherRole)
+            .column("Publisher Name", Tuple2::getT1, oe -> mapPublisher(oe, PartyTO::getPartyName))
+            .column("Vessel Name", Tuple2::getT1, oe -> mapVessel(oe, Vessel::getVesselName))
+            .column("Vessel IMO", Tuple2::getT1, oe -> mapVessel(oe, v -> Integer.parseInt(v.getVesselIMONumber())))
+            .column("Vessel location lat", Tuple2::getT1, oe -> mapVesselLocation(oe, LocationTO::getLatitude))
+            .column("Vessel location long", Tuple2::getT1, oe -> mapVesselLocation(oe, LocationTO::getLongitude))
             //.column("Rotation From", oe -> "N/A (data not available)")
             //.column("Rotation To", oe -> "N/A (data not available)")
             //.column("Direction", oe -> "N/A (data not available)")
-            .column("Carrier Import Voyage Number", oe -> mapTransportCall(oe, TransportCallTO::getImportVoyageNumber))
-            .column("Carrier Export Voyage Number", oe -> mapTransportCall(oe, TransportCallTO::getExportVoyageNumber))
-            .column("Transport Mode", oe -> mapTransportCall(oe, TransportCallTO::getModeOfTransport))
-            .column("Facility Location", oe -> mapTransportCall(oe, TransportCallTO::getUNLocationCode))
-            .column("Terminal Code", oe -> mapTransportCall(oe, TransportCallTO::getFacilityCode))
-            .column("Facility type code", OperationsEvent::getFacilityTypeCode)
-            .column("Port Call Service type code", (oe) -> mapOrDefault(oe, OperationsEvent::getPortCallServiceTypeCode, "<null>"))
-            .column("Event Classifier code", OperationsEvent::getEventClassifierCode)
+            .column("Carrier Import Voyage Number", Tuple2::getT1, oe -> mapTransportCall(oe, TransportCallTO::getImportVoyageNumber))
+            .column("Carrier Export Voyage Number", Tuple2::getT1, oe -> mapTransportCall(oe, TransportCallTO::getExportVoyageNumber))
+            .column("Transport Mode", Tuple2::getT1, oe -> mapTransportCall(oe, TransportCallTO::getModeOfTransport))
+            .column("Facility Location", Tuple2::getT1, oe -> mapTransportCall(oe, TransportCallTO::getUNLocationCode))
+            .column("Terminal Code", Tuple2::getT1, oe -> mapTransportCall(oe, TransportCallTO::getFacilityCode))
+            .column("Facility type code", Tuple2::getT1, OperationsEvent::getFacilityTypeCode)
+            .column("Port Call Service type code", Tuple2::getT1, (oe) -> mapOrDefault(oe, OperationsEvent::getPortCallServiceTypeCode, "<null>"))
+            .column("Event Classifier code", Tuple2::getT1, OperationsEvent::getEventClassifierCode)
             /* Only for *-PBP related timestamps*/
-            .column("PBP Location", oe -> isPBPTimestamp(oe)
+            .column("PBP Location", Tuple2::getT1, oe -> isPBPTimestamp(oe)
                     ? mapEventLocation(oe, LocationTO::getLocationName)
                     : "N/A (wrong timestamp type)")
             /* Only for *-Berth related timestamps*/
-            .column("Berth Location", oe -> isBerthRelatedTimestamp(oe)
+            .column("Berth Location", Tuple2::getT1, oe -> isBerthRelatedTimestamp(oe)
                     ? mapEventLocation(oe, LocationTO::getLocationName)
                     : "N/A (wrong timestamp type)")
-            .column("Event Message", oe -> "TODO")// OperationsEvent::getTimestampTypeName)
-            .column("Event Timestamp", OperationsEvent::getEventDateTime)
-            .column("Event created date time", OperationsEvent::getEventCreatedDateTime)
+            .column("Event Message", Tuple2::getT2, TimestampDefinition::getTimestampTypeName)
+            .column("Event Timestamp", Tuple2::getT1, OperationsEvent::getEventDateTime)
+            .column("Event created date time", Tuple2::getT1, OperationsEvent::getEventCreatedDateTime)
             //.column("Response time", oe -> "N/A")
             //.column("Port call duration", oe -> "N/A")
-            .column("Delay Reason Code", OperationsEvent::getDelayReasonCode)
+            .column("Delay Reason Code", Tuple2::getT1, OperationsEvent::getDelayReasonCode)
             .column("Negotiation Sequence ID", TimestampExportController::computeNegotiationSequenceID)
-            .column("Remark", OperationsEvent::getRemark)
+            .column("Remark", Tuple2::getT1, OperationsEvent::getRemark)
             .pivotChart((dataExportDefinition, pivotTable) -> {
                 pivotTable.addRowLabel(dataExportDefinition.getColumnIndexOf("Vessel Name"));
                 pivotTable.addRowLabel(dataExportDefinition.getColumnIndexOf("Negotiation Sequence ID"));
@@ -148,18 +156,16 @@ public class TimestampExportController {
         return null;
     }
 
-    private static Object computeNegotiationSequenceID(OperationsEvent operationsEvent) {
+    private static Object computeNegotiationSequenceID(Tuple2<OperationsEvent, TimestampDefinition> tuple) {
+        OperationsEvent operationsEvent = tuple.getT1();
+        TimestampDefinition timestampDefinition = tuple.getT2();
         StringBuilder builder = new StringBuilder();
-        builder.append(operationsEvent.getOperationsEventTypeCode()).append('-');
-        if (operationsEvent.getPortCallServiceTypeCode() != null) {
-            builder.append(operationsEvent.getPortCallServiceTypeCode());
-        } else {
-            builder.append(operationsEvent.getFacilityTypeCode());
-        }
         if (operationsEvent.getTransportCall() != null) {
-            return builder.append('-').append(operationsEvent.getTransportCall().getTransportCallID()).toString();
+            builder.append(operationsEvent.getTransportCall().getTransportCallID());
+        } else {
+            builder.append("NO_TC-").append(operationsEvent.getEventID());
         }
-        return builder.append("-NO_TC-").append(operationsEvent.getEventID());
+        return builder.append('-').append(timestampDefinition.getNegotiationCycle()).toString();
     }
 
     @GetMapping
@@ -173,7 +179,21 @@ public class TimestampExportController {
           "timestamps",
                 dataExportDefinition,
                 uiSupportEventService.countAllExtended(genericEventRequest),
-                uiSupportEventService.findAllExtended(genericEventRequest).cast(OperationsEvent.class)
-        );
+                timestampDefinitionService.findAll()
+                                .collectMap(TimestampDefinition::getId, Function.identity())
+                                .flatMap(timestampDefinitions ->
+                                    uiTimestampInfoService.findAll()
+                                            .collectMap(UITimestampInfo::getEventID, info -> timestampDefinitions.get(info.getTimestampDefinition()))
+                                ).flatMapMany(eventID2TimestampDefinitions ->
+                                    uiSupportEventService.findAllExtended(genericEventRequest).cast(OperationsEvent.class)
+                                            .concatMap(oe -> {
+                                                TimestampDefinition timestampDefinition = eventID2TimestampDefinitions.get(oe.getEventID());
+                                                return Mono.zip(
+                                                            Mono.just(oe),
+                                                            Mono.just(timestampDefinition)
+                                                        );
+                                            })
+                                )
+                );
     }
 }

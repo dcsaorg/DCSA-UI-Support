@@ -115,6 +115,10 @@ public class DataExportDefinition<T> {
             return this;
         }
 
+        public <I> Builder<T> column(String columnName, Function<T, I> mapping, Function<I, Object> valueExtractor) {
+            return column(columnName, mapping.andThen(valueExtractor));
+        }
+
         public Builder<T> pivotChart(BiConsumer<DataExportDefinition<T>, XSSFPivotTable> pivotTableGenerator) {
             this.pivotTableGenerator = pivotTableGenerator;
             return this;
