@@ -59,6 +59,7 @@ public class ExcelGenerator {
         private boolean finished = false;
         private Sheet dataSheet;
         private CellStyle dataRowStyle;
+        private CellStyle dateCellStyle;
         private XSSFPivotTable pivotTable;
 
         public void initialize(int pivotRowCount) {
@@ -69,12 +70,17 @@ public class ExcelGenerator {
                 // with the first batch.
                 workbook = new SXSSFWorkbook(null, BUFFER_ROW + 5, false);
             }
+
+            CreationHelper createHelper = workbook.getCreationHelper();
             Font defaultFont = workbook.createFont();
             defaultFont.setBold(false);
             Font boldfaceFont = workbook.createFont();
             boldfaceFont.setBold(true);
             CellStyle headerStyle = workbook.createCellStyle();
             headerStyle.setFont(boldfaceFont);
+
+            dateCellStyle = workbook.createCellStyle();
+            dateCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("yyyy-mmm-dd hh:mm"));
 
             if (rowNum > 0) {
                 throw new IllegalStateException("createHeaderRow must be called at most once and before any row is created");
@@ -125,7 +131,7 @@ public class ExcelGenerator {
             }
             for (T t : rows) {
                 Row row = dataSheet.createRow(rowNum++);
-                dataExportDefinition.writeEntityIntoRow(t, row);
+                dataExportDefinition.writeEntityIntoRow(t, row, dateCellStyle);
                 row.setRowStyle(dataRowStyle);
             }
             if (first && dataSheet instanceof SXSSFSheet) {
