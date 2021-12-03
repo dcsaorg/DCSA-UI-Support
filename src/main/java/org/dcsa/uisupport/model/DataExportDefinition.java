@@ -4,15 +4,14 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.streaming.SXSSFCell;
 import org.apache.poi.xssf.streaming.SXSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFPivotTable;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -54,7 +53,7 @@ public class DataExportDefinition<T> {
         }
     }
 
-    public void writeEntityIntoRow(T entity, Row valueRow) {
+    public void writeEntityIntoRow(T entity, Row valueRow, CellStyle dateCellStyle) {
         int i = 0;
         for (ColumnDefinition<T> columnDefinition : columnDefinitions.values()) {
             Object value = columnDefinition.valueExtractor.apply(entity);
@@ -64,7 +63,10 @@ public class DataExportDefinition<T> {
             } else if (value instanceof Boolean) {
                 cell.setCellValue((Boolean) value);
             } else if (value instanceof Number) {
-                cell.setCellValue(((Number)value).doubleValue());
+                cell.setCellValue(((Number) value).doubleValue());
+            } else if (value instanceof LocalDateTime) {
+                cell.setCellValue((LocalDateTime) value);
+                cell.setCellStyle(dateCellStyle);
             } else {
                 cell.setCellValue(value.toString());
             }
@@ -116,7 +118,15 @@ public class DataExportDefinition<T> {
         }
 
         public <I> Builder<T> column(String columnName, Function<T, I> mapping, Function<I, Object> valueExtractor) {
-            return column(columnName, mapping.andThen(valueExtractor));
+            return column(columnName, combine(mapping, valueExtractor));
+        }
+
+        public <I1, I2> Builder<T> column(String columnName, Function<T, I1> mappingA, Function<I1, I2> mappingB, Function<I2, Object> valueExtractor) {
+            return column(columnName, combine(mappingA, mappingB, valueExtractor));
+        }
+
+        public <I1, I2, I3> Builder<T> column(String columnName, Function<T, I1> mappingA, Function<I1, I2> mappingB, Function<I2, I3> mappingC, Function<I3, Object> valueExtractor) {
+            return column(columnName, combine(mappingA, mappingB, mappingC, valueExtractor));
         }
 
         public Builder<T> pivotChart(BiConsumer<DataExportDefinition<T>, XSSFPivotTable> pivotTableGenerator) {
@@ -133,6 +143,21 @@ public class DataExportDefinition<T> {
                     pivotTableGenerator
             );
         }
+    }
+
+    private static <A, B, C> Function<A, C> combine(Function<A, B> first, Function<B, C> second) {
+        return (a -> {
+            B b = first.apply(a);
+            return b != null ? second.apply(b) : null;
+        });
+    }
+
+    private static <A, B, C, D> Function<A, D> combine(Function<A, B> first, Function<B, C> second, Function<C, D> third) {
+        return combine(combine(first, second), third);
+    }
+
+    private static <A, B, C, D, E> Function<A, E> combine(Function<A, B> first, Function<B, C> second, Function<C, D> third, Function<D, E> fourth) {
+        return combine(combine(first, second, third), fourth);
     }
 
 }
