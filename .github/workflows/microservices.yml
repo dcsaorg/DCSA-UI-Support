@@ -1,36 +1,69 @@
-name: Microservices CI
+name: DCSA-UI-Support MASTER CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Fetch backend
-      uses: actions/checkout@v2
-      with:
-        path: DCSA-UI-Support
-        submodules: recursive
-    - name: Set up Java JDK
-      uses: actions/setup-java@v1
-      with:
-        java-version: 11
-    - name: Cache local Maven repository
-      uses: actions/cache@v2
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
-    - name: maven-settings-xml-action
-      uses: whelk-io/maven-settings-xml-action@v12
-      with:
-        repositories: '[{ "id": "github", "name": "DCSA Backend repo", "url": "https://maven.pkg.github.com/dcsaorg/DCSA-Core", "releases": { "enabled": "true" }, "snapshots": { "enabled": "true" } }]'
-        servers: '[{ "id": "github", "username": "${{ secrets.DCSA_USER }}", "password": "${{ secrets.DCSA_PACKAGES_PAT }}" }]'
+      - uses: actions/checkout@v2
+        with:
+          path: DCSA-UI-Support
+          submodules: recursive
 
-    - name: Build API
-      run: cd DCSA-UI-Support && mvn package -DskipTests -X #Need to skip the tests as they depend on a running DB
+      - name: Set up Java JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: 17
+          cache: 'maven'
 
-    - name: Run the UI Support microservice plus database
-      run: cd DCSA-UI-Support && docker-compose -f docker-compose.yml up -d -V
-      
+      - name: maven-settings-xml-action
+        uses: whelk-io/maven-settings-xml-action@v12
+        with:
+          repositories: '[{ "id": "github", "name": "DCSA Backend repo", "url": "https://maven.pkg.github.com/dcsaorg/DCSA-Core", "releases": { "enabled": "true" }, "snapshots": { "enabled": "true" } }]'
+          servers: '[{ "id": "github", "username": "${{ secrets.DCSA_USER }}", "password": "${{ secrets.DCSA_PACKAGES_PAT }}" }]'
+
+      - name: Build UI-Support
+        run: cd DCSA-UI-Support && mvn clean -U -B package -Ddcsa.artifacttype=-SNAPSHOT
+
+      - name: Build and run the microservices
+        run: cd DCSA-UI-Support && docker-compose -f docker-compose.yml up -d -V --build
+
+      - name: Fetch Backend Status
+        run: |
+          sleep 10
+          status=$(curl -s http://localhost:9091/v1/actuator/health | jq -r '.status')
+          retries=12
+
+          while [[ "$status" != "UP" ]] && [[ $retries -gt 0 ]]; do
+            echo "Status is '$status' - waiting 5 secs ($retries retries left)"
+            sleep 5
+            retries=$((retries - 1))
+            status=$(curl -s http://localhost:9091/v1/actuator/health | jq -r '.status')
+          done
+
+          echo "Final status is '$status'"
+          if [[ "$status" != "UP" ]]; then
+            curl -v http://localhost:9091/v1/actuator/health
+            docker ps
+            docker logs dcsa-ui-support_dcsa-ui-support_1
+          fi
+
+          echo "::set-output name=STATUS::$status"
+        id: healthcheck
+
+      - name: Confirm microservice status
+        if: ${{ steps.healthcheck.outputs.STATUS == 'UP' }}
+        run: |
+          echo "The DCSA-UI-Support service is UP."
+
+      - name: Run Integration Tests
+        run: |
+          cd DCSA-UI-Support && java -jar ui-support-integration-tests/target/dcsa-ui-support-integration-tests-with-dependencies.jar
