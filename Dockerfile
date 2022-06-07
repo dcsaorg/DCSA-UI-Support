@@ -1,15 +1,9 @@
-FROM debian:buster
+FROM eclipse-temurin:17-jre-alpine
 
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y upgrade \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-        openjdk-11-jre-headless \
-    && rm -rf /var/lib/apt/lists/*
-
-EXPOSE 9090
+EXPOSE 9091
 ENV db_hostname dcsa_db
 COPY run-in-container.sh /run.sh
 RUN chmod +x /run.sh
-COPY src/main/resources/application.yaml .
-COPY target/dcsa_ui_support-*.jar .
+COPY ui-support-service/src/main/resources/application.yml .
+COPY ui-support-service/target/dcsa-ui-support-service.jar .
 CMD ["/run.sh"]
