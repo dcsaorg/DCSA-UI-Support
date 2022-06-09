@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 public record TerminalTO(
   @Size(max = 100) @JsonProperty("facilityName")
   String name,
-  @Size(max = 4) @JsonProperty("facilityBICCOde")
+  @Size(max = 4) @JsonProperty("facilityBICCode")
   String bicCode,
   @Size(max = 6) @JsonProperty("facilitySMDGCode")
   String smdgCode,
