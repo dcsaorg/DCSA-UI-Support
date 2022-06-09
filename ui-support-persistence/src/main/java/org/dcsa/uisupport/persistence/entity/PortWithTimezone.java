@@ -25,7 +25,6 @@ import javax.persistence.Table;
 @Setter(AccessLevel.PRIVATE)
 @Entity
 @Table(name = "un_location")
-@org.hibernate.annotations.Table(appliesTo = "port_timezone", optional = false) // forces an inner join instead of outer join
 @SecondaryTable(name = "port_timezone", pkJoinColumns = @PrimaryKeyJoinColumn(name = "un_location_code"))
 public class PortWithTimezone {
   @Id

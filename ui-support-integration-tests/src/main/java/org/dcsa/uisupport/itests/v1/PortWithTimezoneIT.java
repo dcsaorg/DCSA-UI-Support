@@ -34,7 +34,7 @@ public class PortWithTimezoneIT {
       .jsonPath().getList(".", PortWithTimezoneTO.class)
       ;
 
-    assertTrue(ports.stream().noneMatch(this::anyNullField));
+    assertTrue(ports.stream().noneMatch(this::codeOrNameIsNull));
 
     // Just test a single port
     PortWithTimezoneTO dublin = ports.stream().filter(port -> port.unLocationCode().equals("IEORK")).findFirst().get();
@@ -42,7 +42,7 @@ public class PortWithTimezoneIT {
     assertEquals("Europe/Dublin", dublin.ianaTimezone());
   }
 
-  private Boolean anyNullField(PortWithTimezoneTO port) {
-    return port.unLocationCode() == null || port.unLocationName() == null || port.ianaTimezone() == null;
+  private Boolean codeOrNameIsNull(PortWithTimezoneTO port) {
+    return port.unLocationCode() == null || port.unLocationName() == null;
   }
 }
