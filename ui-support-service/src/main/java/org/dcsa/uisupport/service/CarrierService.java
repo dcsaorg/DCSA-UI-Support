@@ -15,6 +15,8 @@ public class CarrierService {
   private final CarrierMapper carrierMapper;
 
   public List<CarrierTO> findAll() {
-    return carrierRepository.findAll().stream().map(carrierMapper::toTO).toList();
+    return carrierRepository.findAll().stream()
+      .map(carrierMapper::toTO)
+      .toList();
   }
 }
