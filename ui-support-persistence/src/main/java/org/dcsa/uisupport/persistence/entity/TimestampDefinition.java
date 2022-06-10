@@ -6,9 +6,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.dcsa.uisupport.persistence.entity.enums.EventClassifierCode;
+import org.dcsa.uisupport.persistence.entity.enums.FacilityTypeCode;
+import org.dcsa.uisupport.persistence.entity.enums.OperationsEventTypeCode;
+import org.dcsa.uisupport.persistence.entity.enums.PortCallPhaseTypeCode;
+import org.dcsa.uisupport.persistence.entity.enums.PortCallServiceTypeCode;
+import org.dcsa.uisupport.persistence.entity.enums.PublisherRole;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -27,26 +35,33 @@ public class TimestampDefinition {
   @Column(name = "timestamp_type_name", nullable = false, unique = true)
   private String typeName;
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "publisher_role", length = 3, nullable = false)
-  private String publisherRole;
+  private PublisherRole publisherRole;
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "primary_receiver", length = 3, nullable = false)
-  private String primaryReceiver;
+  private PublisherRole primaryReceiver;
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "event_classifier_code", length = 3, nullable = false)
-  private String eventClassifierCode;
+  private EventClassifierCode eventClassifierCode;
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "operations_event_type_code", length = 4, nullable = false)
-  private String operationsEventTypeCode;
+  private OperationsEventTypeCode operationsEventTypeCode;
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "port_call_phase_type_code", length = 4)
-  private String portCallPhaseTypeCode;
+  private PortCallPhaseTypeCode portCallPhaseTypeCode;
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "port_call_service_type_code", length = 4)
-  private String portCallServiceTypeCode;
+  private PortCallServiceTypeCode portCallServiceTypeCode;
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "facility_type_code", length = 4)
-  private String facilityTypeCode;
+  private FacilityTypeCode facilityTypeCode;
 
   @Column(name = "is_berth_location_needed", nullable = false)
   private Boolean isBerthLocationNeeded;
