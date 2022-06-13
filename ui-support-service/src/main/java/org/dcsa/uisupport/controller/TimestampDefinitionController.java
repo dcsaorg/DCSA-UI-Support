@@ -1,7 +1,7 @@
 package org.dcsa.uisupport.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.dcsa.uisupport.service.TimestampDefinitionService;
+import org.dcsa.uisupport.service.TimestampDefinitionTOService;
 import org.dcsa.uisupport.transferobjects.TimestampDefinitionTO;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +14,10 @@ import java.util.List;
 @RequestMapping(value = "unofficial/timestamp-definitions", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class TimestampDefinitionController {
-  private final TimestampDefinitionService timestampDefinitionService;
+  private final TimestampDefinitionTOService timestampDefinitionTOService;
 
   @GetMapping
   public List<TimestampDefinitionTO> findAll() {
-    return timestampDefinitionService.findAll();
+    return timestampDefinitionTOService.findAll();
   }
 }
