@@ -2,7 +2,7 @@ package org.dcsa.uisupport.service;
 
 import org.dcsa.skernel.domain.persistence.entity.Facility;
 import org.dcsa.uisupport.mapping.FacilityMapper;
-import org.dcsa.uisupport.persistence.repository.FacilityRepository;
+import org.dcsa.uisupport.persistence.repository.UiFacilityRepository;
 import org.dcsa.uisupport.transferobjects.TerminalTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.verify;
 @DisplayName("Tests for the terminal service")
 class TerminalServiceTest {
 
-  @Mock private FacilityRepository facilityRepository;
+  @Mock private UiFacilityRepository uiFacilityRepository;
   @InjectMocks TerminalService terminalService;
   @Spy FacilityMapper facilityMapper = Mappers.getMapper(FacilityMapper.class);
 
@@ -34,7 +34,7 @@ class TerminalServiceTest {
   @DisplayName(
       "Retrieving a Facility should result in a list of terminals containing one terminalTO.")
   void testTerminalService() {
-    given(facilityRepository.findFacilitiesByUnLocationCodeAndSmdgCodeIsNotNull(any()))
+    given(uiFacilityRepository.findFacilitiesByUnLocationCodeAndSmdgCodeIsNotNull(any()))
         .willReturn(
             List.of(
                 Facility.builder()
@@ -46,7 +46,7 @@ class TerminalServiceTest {
 
     List<TerminalTO> terminals = terminalService.findFacilitiesForUnLocationCode("NLRTM");
 
-    verify(facilityRepository, times(1)).findFacilitiesByUnLocationCodeAndSmdgCodeIsNotNull(any());
+    verify(uiFacilityRepository, times(1)).findFacilitiesByUnLocationCodeAndSmdgCodeIsNotNull(any());
     assertThat(terminals.size()).isEqualTo(1);
     assertThat(terminals.get(0)).isInstanceOf(TerminalTO.class);
     assertThat(terminals.get(0).unLocationCode()).isEqualTo("NLRTM");
@@ -57,7 +57,7 @@ class TerminalServiceTest {
   @DisplayName(
       "Retrieving multiple facilities should return in a list of terminals containing multiple terminalTO's.")
   void testTerminalServiceMultipleFacilities() {
-    given(facilityRepository.findFacilitiesByUnLocationCodeAndSmdgCodeIsNotNull(any()))
+    given(uiFacilityRepository.findFacilitiesByUnLocationCodeAndSmdgCodeIsNotNull(any()))
         .willReturn(
             List.of(
                 Facility.builder()
@@ -74,7 +74,7 @@ class TerminalServiceTest {
 
     List<TerminalTO> terminals = terminalService.findFacilitiesForUnLocationCode("NLRTM");
 
-    verify(facilityRepository, times(1)).findFacilitiesByUnLocationCodeAndSmdgCodeIsNotNull(any());
+    verify(uiFacilityRepository, times(1)).findFacilitiesByUnLocationCodeAndSmdgCodeIsNotNull(any());
     assertThat(terminals.size()).isEqualTo(2);
     assertThat(terminals.get(0)).isInstanceOf(TerminalTO.class);
     assertThat(terminals.get(1).unLocationCode()).isEqualTo("DEHAM");
@@ -84,12 +84,12 @@ class TerminalServiceTest {
   @Test
   @DisplayName("No Facilities found should result in an empty list")
   void testNoFacilitiesFound() {
-    given(facilityRepository.findFacilitiesByUnLocationCodeAndSmdgCodeIsNotNull(any()))
+    given(uiFacilityRepository.findFacilitiesByUnLocationCodeAndSmdgCodeIsNotNull(any()))
         .willReturn(Collections.emptyList());
 
     List<TerminalTO> terminals = terminalService.findFacilitiesForUnLocationCode("NLRTM");
 
-    verify(facilityRepository, times(1)).findFacilitiesByUnLocationCodeAndSmdgCodeIsNotNull(any());
+    verify(uiFacilityRepository, times(1)).findFacilitiesByUnLocationCodeAndSmdgCodeIsNotNull(any());
     assertThat(terminals.size()).isEqualTo(0);
   }
 }

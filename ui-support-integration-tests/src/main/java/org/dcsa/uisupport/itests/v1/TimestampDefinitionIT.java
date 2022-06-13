@@ -39,7 +39,7 @@ public class TimestampDefinitionIT {
     // Just test a single TimestampDefinition
     TimestampDefinitionTO expected = TimestampDefinitionTO.builder()
       .id("UC48-OUTB")
-      .typeName("ATS-Towage (Outbound)")
+      .timestampTypeName("ATS-Towage (Outbound)")
       .publisherRole("TWG")
       .primaryReceiver("ATH")
       .eventClassifierCode("ACT")
@@ -47,7 +47,7 @@ public class TimestampDefinitionIT {
       .portCallPhaseTypeCode("OUTB")
       .portCallServiceTypeCode("TOWG")
       .isBerthLocationNeeded(false)
-      .isPbpLocationNeeded(false)
+      .isPBPLocationNeeded(false)
       .isTerminalNeeded(true)
       .isVesselPositionNeeded(true)
       .negotiationCycle("T-Towage-Outbound")

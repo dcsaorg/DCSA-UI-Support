@@ -1,6 +1,6 @@
 package org.dcsa.uisupport.mapping;
 
-import org.dcsa.uisupport.persistence.entity.TimestampDefinition;
+import org.dcsa.jit.persistence.entity.TimestampDefinition;
 import org.dcsa.uisupport.transferobjects.TimestampDefinitionTO;
 import org.mapstruct.Mapper;
 

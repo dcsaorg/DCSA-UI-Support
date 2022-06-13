@@ -2,7 +2,7 @@ package org.dcsa.uisupport.service;
 
 import lombok.RequiredArgsConstructor;
 import org.dcsa.uisupport.mapping.FacilityMapper;
-import org.dcsa.uisupport.persistence.repository.FacilityRepository;
+import org.dcsa.uisupport.persistence.repository.UiFacilityRepository;
 import org.dcsa.uisupport.transferobjects.TerminalTO;
 import org.springframework.stereotype.Service;
 
@@ -12,12 +12,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TerminalService {
 
-  private final FacilityRepository facilityRepository;
+  private final UiFacilityRepository uiFacilityRepository;
   private final FacilityMapper facilityMapper;
 
   public List<TerminalTO> findFacilitiesForUnLocationCode(String unLocationCode) {
 
-    return facilityRepository
+    return uiFacilityRepository
         .findFacilitiesByUnLocationCodeAndSmdgCodeIsNotNull(unLocationCode)
         .stream()
         .map(facilityMapper::facilityToTerminalTO)
