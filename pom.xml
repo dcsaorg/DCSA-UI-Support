@@ -66,11 +66,6 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.poi</groupId>
-				<artifactId>poi-ooxml</artifactId>
-				<version>5.0.0</version>
-			</dependency>
-			<dependency>
 				<groupId>org.dcsa.shared-kernel</groupId>
 				<artifactId>dcsa-shared-kernel-parent</artifactId>
 				<version>${shared-kernel.version}</version>
@@ -91,6 +86,23 @@
 				<groupId>org.dcsa.jit</groupId>
 				<artifactId>dcsa-jit-service</artifactId>
 				<version>${jit.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml</artifactId>
+				<version>5.2.2</version>
+			</dependency>
+
+			<!-- Convergence -->
+			<dependency>
+				<groupId>org.osgi</groupId>
+				<artifactId>org.osgi.core</artifactId>
+				<version>6.0.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.plexus</groupId>
+				<artifactId>plexus-utils</artifactId>
+				<version>2.0.5</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -126,7 +138,7 @@
 		<repository>
 			<id>github</id>
 			<name>GitHub OWNER Apache Maven Packages</name>
-			<url>https://maven.pkg.github.com/dcsaorg/DCSA-OVS</url>
+			<url>https://maven.pkg.github.com/dcsaorg/DCSA-Core</url>
 		</repository>
 	</distributionManagement>
 

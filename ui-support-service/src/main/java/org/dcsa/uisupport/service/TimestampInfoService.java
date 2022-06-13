@@ -3,11 +3,11 @@ package org.dcsa.uisupport.service;
 import lombok.RequiredArgsConstructor;
 import org.dcsa.jit.mapping.OperationsEventMapper;
 import org.dcsa.jit.persistence.entity.*;
+import org.dcsa.jit.persistence.repository.OpsEventTimestampDefinitionRepository;
 import org.dcsa.jit.persistence.repository.UnmappedEventRepository;
 import org.dcsa.jit.transferobjects.OperationsEventTO;
 import org.dcsa.uisupport.mapping.TimestampDefinitionMapper;
 import org.dcsa.uisupport.persistence.entity.PendingEvent;
-import org.dcsa.uisupport.persistence.repository.OpsEventTimestampDefinitionRepositoryForUI;
 import org.dcsa.uisupport.persistence.repository.PendingEventRepository;
 import org.dcsa.uisupport.transferobjects.TimestampDefinitionTO;
 import org.dcsa.uisupport.transferobjects.TimestampInfoTO;
@@ -21,14 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class TimestampInfoService {
   private final UnmappedEventRepository unmappedEventRepository;
   private final PendingEventRepository pendingEventRepository;
-  private final OpsEventTimestampDefinitionRepositoryForUI opsEventTimestampDefinitionRepository;
+  private final OpsEventTimestampDefinitionRepository opsEventTimestampDefinitionRepository;
   private final TimestampDefinitionMapper timestampDefinitionMapper;
   private final OperationsEventMapper operationsEventMapper;
   public List<TimestampInfoTO> findAll(String transportCallID, String negotiationCycle, String portCallPart) {
@@ -54,7 +53,7 @@ public class TimestampInfoService {
               TimestampDefinitionTO timestampDefinitionTO = timestampDefinitionMapper.toTO(opsEventTimestampDefinition.getTimestampDefinition());
               return TimestampInfoTO.builder().operationsEventTO(operationsEventTO).timestampDefinitionTO(timestampDefinitionTO).eventDeliveryStatus(eventDeliveryStatus).build();
             })
-        .collect(Collectors.toList());
+        .toList();
   }
 
   private static Specification<OpsEventTimestampDefinition> fetchSpec(

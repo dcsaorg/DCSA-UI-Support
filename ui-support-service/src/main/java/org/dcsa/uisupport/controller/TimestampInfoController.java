@@ -2,7 +2,6 @@ package org.dcsa.uisupport.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.dcsa.uisupport.service.TimestampInfoService;
-import org.dcsa.uisupport.transferobjects.TimestampDefinitionTO;
 import org.dcsa.uisupport.transferobjects.TimestampInfoTO;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
