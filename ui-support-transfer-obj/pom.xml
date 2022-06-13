@@ -35,6 +35,10 @@
 			<groupId>org.dcsa.jit</groupId>
 			<artifactId>dcsa-jit-transfer-obj</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+		</dependency>
 	</dependencies>
 
 </project>

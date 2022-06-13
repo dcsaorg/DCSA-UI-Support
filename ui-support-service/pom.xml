@@ -49,6 +49,18 @@
 			<artifactId>dcsa-shared-kernel-all</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.dcsa.jit</groupId>
+			<artifactId>dcsa-jit-persistence</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.dcsa.jit</groupId>
+			<artifactId>dcsa-jit-service</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.dcsa.shared-kernel</groupId>
 			<artifactId>dcsa-shared-kernel-test-helpers</artifactId>
 			<scope>test</scope>
@@ -57,10 +69,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.dcsa.jit</groupId>
-			<artifactId>dcsa-jit-service</artifactId>
 		</dependency>
 	</dependencies>
 
