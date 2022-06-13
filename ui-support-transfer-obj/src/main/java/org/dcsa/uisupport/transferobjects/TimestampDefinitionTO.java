@@ -9,7 +9,7 @@ public record TimestampDefinitionTO(
   String id,
 
   @JsonProperty("timestampTypeName")
-  String typeName,
+  String timestampTypeName,
 
   @Size(max = 3) @JsonProperty("publisherRole")
   String publisherRole,
@@ -36,7 +36,7 @@ public record TimestampDefinitionTO(
   Boolean isBerthLocationNeeded,
 
   @JsonProperty("isPBPLocationNeeded")
-  Boolean isPbpLocationNeeded,
+  Boolean isPBPLocationNeeded,
 
   @JsonProperty("isTerminalNeeded")
   Boolean isTerminalNeeded,

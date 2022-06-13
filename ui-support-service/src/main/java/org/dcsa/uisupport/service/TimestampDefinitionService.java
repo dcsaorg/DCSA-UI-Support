@@ -1,8 +1,8 @@
 package org.dcsa.uisupport.service;
 
 import lombok.RequiredArgsConstructor;
+import org.dcsa.jit.persistence.repository.TimestampDefinitionRepository;
 import org.dcsa.uisupport.mapping.TimestampDefinitionMapper;
-import org.dcsa.uisupport.persistence.repository.TimestampDefinitionRepository;
 import org.dcsa.uisupport.transferobjects.TimestampDefinitionTO;
 import org.springframework.stereotype.Service;
 
