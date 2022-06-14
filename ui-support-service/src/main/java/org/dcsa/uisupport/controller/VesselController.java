@@ -2,7 +2,7 @@ package org.dcsa.uisupport.controller;
 
 import lombok.AllArgsConstructor;
 import org.dcsa.jit.transferobjects.VesselTO;
-import org.dcsa.uisupport.service.VesselService;
+import org.dcsa.uisupport.service.UiVesselService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -15,23 +15,23 @@ import java.util.UUID;
 @AllArgsConstructor
 public class VesselController {
 
-  private final VesselService vesselService;
+  private final UiVesselService uiVesselService;
 
   @GetMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
   public VesselTO get(@PathVariable UUID id) {
-    return vesselService.fetchVessel(id);
+    return uiVesselService.fetchVessel(id);
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public VesselTO post(@Valid @RequestBody VesselTO request) {
-    return vesselService.createVessel(request);
+    return uiVesselService.createVessel(request);
   }
 
   @PutMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
   public VesselTO update(@PathVariable UUID id, @Valid @RequestBody VesselTO request) {
-    return vesselService.updateVessel(id, request);
+    return uiVesselService.updateVessel(id, request);
   }
 }
