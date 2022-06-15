@@ -18,7 +18,7 @@ public class TerminalService {
   public List<TerminalTO> findFacilitiesForUnLocationCode(String unLocationCode) {
 
     return uiFacilityRepository
-        .findFacilitiesByUnLocationCodeAndSmdgCodeIsNotNull(unLocationCode)
+        .findFacilitiesByUNLocationCodeAndFacilitySMDGCodeIsNotNull(unLocationCode)
         .stream()
         .map(facilityMapper::facilityToTerminalTO)
         .toList();

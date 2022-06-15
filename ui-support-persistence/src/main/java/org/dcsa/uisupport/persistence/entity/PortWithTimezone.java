@@ -29,10 +29,10 @@ import javax.persistence.Table;
 public class PortWithTimezone {
   @Id
   @Column(name = "un_location_code", length = 5, nullable = false, columnDefinition = "bpchar")
-  private String unLocationCode;
+  private String UNLocationCode;
 
   @Column(name = "un_location_name", length = 100)
-  private String unLocationName;
+  private String UNLocationName;
 
   @Column(name = "location_code", length = 3, columnDefinition = "bpchar")
   private String locationCode;

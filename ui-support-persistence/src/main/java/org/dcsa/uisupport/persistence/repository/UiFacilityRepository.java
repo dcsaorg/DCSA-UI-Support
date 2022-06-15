@@ -10,5 +10,5 @@ import java.util.UUID;
 
 @Repository
 public interface UiFacilityRepository extends FacilityRepository {
-  List<Facility> findFacilitiesByUnLocationCodeAndSmdgCodeIsNotNull(String unLocationCode);
+  List<Facility> findFacilitiesByUNLocationCodeAndFacilitySMDGCodeIsNotNull(String unLocationCode);
 }

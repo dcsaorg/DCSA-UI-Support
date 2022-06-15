@@ -6,16 +6,16 @@ import lombok.Builder;
 import javax.validation.constraints.Size;
 
 public record PortWithTimezoneTO(
-  @Size(max = 5) @JsonProperty("unLocationCode")
-  String unLocationCode,
+  @Size(max = 5)
+  String UNLocationCode,
 
-  @Size(max = 100) @JsonProperty("unLocationName")
-  String unLocationName,
+  @Size(max = 100)
+  String UNLocationName,
 
-  @Size(max = 3) @JsonProperty("locationCode")
+  @Size(max = 3)
   String locationCode,
 
-  @Size(max = 2) @JsonProperty("countryCode")
+  @Size(max = 2)
   String countryCode,
 
   @JsonProperty("timezone")
