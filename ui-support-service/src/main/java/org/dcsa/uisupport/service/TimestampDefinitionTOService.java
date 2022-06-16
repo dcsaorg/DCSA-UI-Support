@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class TimestampDefinitionService {
+public class TimestampDefinitionTOService {
   private final TimestampDefinitionRepository timestampDefinitionRepository;
   private final TimestampDefinitionMapper timestampDefinitionMapper;
 
