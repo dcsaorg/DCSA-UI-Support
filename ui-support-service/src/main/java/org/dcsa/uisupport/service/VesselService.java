@@ -33,13 +33,16 @@ public class VesselService {
   @Transactional
   public VesselTO createVessel(final VesselTO request) {
 
+    Carrier carrierForRequestedVessel = findCarrierForVesselRequest(request);
+
     Vessel vessel =
         vesselMapper.toEntity(request).toBuilder()
-            .vesselOperatorCarrier(findCarrierForVesselRequest(request))
+            .vesselOperatorCarrier(carrierForRequestedVessel)
             .build();
 
     Vessel saveVessel = vesselRepository.save(vessel);
-    return vesselMapper.toTO(saveVessel);
+
+    return setCarrierDetailsOnVesselTOIfPresent(request, carrierForRequestedVessel, saveVessel);
   }
 
   private Carrier findCarrierForVesselRequest(final VesselTO request) {
@@ -66,13 +69,38 @@ public class VesselService {
     return carrier;
   }
 
+  private VesselTO setCarrierDetailsOnVesselTOIfPresent(
+      VesselTO request, Carrier carrierForVesselRequest, Vessel vessel) {
+    if (null != carrierForVesselRequest) {
+      if (CarrierCodeListProvider.SMDG.equals(request.vesselOperatorCarrierCodeListProvider())) {
+        return vesselMapper.toTO(vessel).toBuilder()
+            .vesselOperatorCarrierCode(carrierForVesselRequest.getSmdgCode())
+            .vesselOperatorCarrierCodeListProvider(CarrierCodeListProvider.SMDG)
+            .build();
+      } else
+        return vesselMapper.toTO(vessel).toBuilder()
+            .vesselOperatorCarrierCode(carrierForVesselRequest.getNmftaCode())
+            .vesselOperatorCarrierCodeListProvider(CarrierCodeListProvider.NMFTA)
+            .build();
+    } else {
+      return vesselMapper.toTO(vessel);
+    }
+  }
+
   @Transactional
   public VesselTO updateVessel(final UUID id, final VesselTO request) {
+
     this.fetchVessel(id); // this will throw an error if vessel does not exist
-    Carrier carrier = this.findCarrierForVesselRequest(request);
+    Carrier carrierForRequestedVessel = this.findCarrierForVesselRequest(request);
     Vessel vessel =
-        vesselMapper.toEntity(request).toBuilder().id(id).vesselOperatorCarrier(carrier).build();
+        vesselMapper.toEntity(request).toBuilder()
+            .id(id)
+            .vesselOperatorCarrier(carrierForRequestedVessel)
+            .build();
+
     Vessel updateVessel = vesselRepository.save(vessel);
-    return vesselMapper.toTO(updateVessel);
+
+    return this.setCarrierDetailsOnVesselTOIfPresent(
+        request, carrierForRequestedVessel, updateVessel);
   }
 }
