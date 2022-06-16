@@ -54,15 +54,11 @@ jobs:
             curl -v http://localhost:9091/v1/actuator/health || :
             docker ps || :
             docker logs dcsa-ui-support_dcsa-ui-support_1 || :
+            exit 1
           fi
 
           echo "::set-output name=STATUS::$status"
         id: healthcheck
-
-      - name: Confirm microservice status
-        if: ${{ steps.healthcheck.outputs.STATUS == 'UP' }}
-        run: |
-          echo "The DCSA-UI-Support service is UP."
 
       - name: Run Integration Tests
         run: |
