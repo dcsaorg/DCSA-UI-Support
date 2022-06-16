@@ -1,13 +1,13 @@
 package org.dcsa.uisupport.service;
 
 import lombok.AllArgsConstructor;
+import org.dcsa.jit.mapping.VesselMapper;
 import org.dcsa.jit.persistence.entity.Carrier;
 import org.dcsa.jit.persistence.entity.Vessel;
 import org.dcsa.jit.persistence.repository.VesselRepository;
 import org.dcsa.jit.transferobjects.VesselTO;
 import org.dcsa.jit.transferobjects.enums.CarrierCodeListProvider;
 import org.dcsa.skernel.errors.exceptions.ConcreteRequestErrorMessageException;
-import org.dcsa.uisupport.mapping.VesselMapper;
 import org.dcsa.uisupport.persistence.repository.CarrierRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
