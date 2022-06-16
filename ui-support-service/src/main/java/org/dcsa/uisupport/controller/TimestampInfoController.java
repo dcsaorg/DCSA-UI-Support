@@ -1,10 +1,9 @@
 package org.dcsa.uisupport.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.dcsa.uisupport.service.TerminalService;
-import org.dcsa.uisupport.service.TimestampDefinitionService;
 import org.dcsa.uisupport.service.TimestampInfoService;
-import org.dcsa.uisupport.transferobjects.TerminalTO;
+import org.dcsa.uisupport.transferobjects.TimestampDefinitionTO;
+import org.dcsa.uisupport.transferobjects.TimestampInfoTO;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,9 +19,9 @@ public class TimestampInfoController {
   private final TimestampInfoService timestampInfoService;
 
   @GetMapping
-  public List<TerminalTO> getTerminals(
-      @RequestParam(value = "transportCallID") String unLocationCode,
-      @RequestParam(value = "negotiationCycle") String negotiationCycle) {
+  public List<TimestampInfoTO> getTerminals(
+      @RequestParam(value = "transportCallID", required = false) String unLocationCode,
+      @RequestParam(value = "negotiationCycle", required = false) String negotiationCycle) {
     return timestampInfoService.findAll(unLocationCode, negotiationCycle);
   }
 }
