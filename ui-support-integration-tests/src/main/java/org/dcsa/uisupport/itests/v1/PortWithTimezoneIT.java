@@ -37,12 +37,12 @@ public class PortWithTimezoneIT {
     assertTrue(ports.stream().noneMatch(this::codeOrNameIsNull));
 
     // Just test a single port
-    PortWithTimezoneTO dublin = ports.stream().filter(port -> port.unLocationCode().equals("IEORK")).findFirst().get();
-    assertEquals("Cork", dublin.unLocationName());
+    PortWithTimezoneTO dublin = ports.stream().filter(port -> port.UNLocationCode().equals("IEORK")).findFirst().get();
+    assertEquals("Cork", dublin.UNLocationName());
     assertEquals("Europe/Dublin", dublin.ianaTimezone());
   }
 
   private Boolean codeOrNameIsNull(PortWithTimezoneTO port) {
-    return port.unLocationCode() == null || port.unLocationName() == null;
+    return port.UNLocationCode() == null || port.UNLocationName() == null;
   }
 }

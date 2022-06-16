@@ -34,62 +34,62 @@ class TerminalServiceTest {
   @DisplayName(
       "Retrieving a Facility should result in a list of terminals containing one terminalTO.")
   void testTerminalService() {
-    given(uiFacilityRepository.findFacilitiesByUnLocationCodeAndSmdgCodeIsNotNull(any()))
+    given(uiFacilityRepository.findFacilitiesByUNLocationCodeAndFacilitySMDGCodeIsNotNull(any()))
         .willReturn(
             List.of(
                 Facility.builder()
-                    .unLocationCode("NLRTM")
-                    .bicCode("MBBA")
-                    .smdgCode("NANS")
-                    .name("UNIPORT WAALHAVEN TERMINAL")
+                    .UNLocationCode("NLRTM")
+                    .facilityBICCode("MBBA")
+                    .facilitySMDGCode("NANS")
+                    .facilityName("UNIPORT WAALHAVEN TERMINAL")
                     .build()));
 
     List<TerminalTO> terminals = terminalService.findFacilitiesForUnLocationCode("NLRTM");
 
-    verify(uiFacilityRepository, times(1)).findFacilitiesByUnLocationCodeAndSmdgCodeIsNotNull(any());
+    verify(uiFacilityRepository, times(1)).findFacilitiesByUNLocationCodeAndFacilitySMDGCodeIsNotNull(any());
     assertThat(terminals.size()).isEqualTo(1);
     assertThat(terminals.get(0)).isInstanceOf(TerminalTO.class);
-    assertThat(terminals.get(0).unLocationCode()).isEqualTo("NLRTM");
-    assertThat(terminals.get(0).bicCode()).isEqualTo("MBBA");
+    assertThat(terminals.get(0).UNLocationCode()).isEqualTo("NLRTM");
+    assertThat(terminals.get(0).facilityBICCode()).isEqualTo("MBBA");
   }
 
   @Test
   @DisplayName(
       "Retrieving multiple facilities should return in a list of terminals containing multiple terminalTO's.")
   void testTerminalServiceMultipleFacilities() {
-    given(uiFacilityRepository.findFacilitiesByUnLocationCodeAndSmdgCodeIsNotNull(any()))
+    given(uiFacilityRepository.findFacilitiesByUNLocationCodeAndFacilitySMDGCodeIsNotNull(any()))
         .willReturn(
             List.of(
                 Facility.builder()
-                    .unLocationCode("NLRTM")
-                    .bicCode("MBBA")
-                    .smdgCode("NANS")
-                    .name("UNIPORT WAALHAVEN TERMINAL")
+                    .UNLocationCode("NLRTM")
+                    .facilityBICCode("MBBA")
+                    .facilitySMDGCode("NANS")
+                    .facilityName("UNIPORT WAALHAVEN TERMINAL")
                     .build(),
                 Facility.builder()
-                    .unLocationCode("DEHAM")
-                    .smdgCode("SWT")
-                    .name("SUD-WEST TERMINAL")
+                    .UNLocationCode("DEHAM")
+                    .facilitySMDGCode("SWT")
+                    .facilityName("SUD-WEST TERMINAL")
                     .build()));
 
     List<TerminalTO> terminals = terminalService.findFacilitiesForUnLocationCode("NLRTM");
 
-    verify(uiFacilityRepository, times(1)).findFacilitiesByUnLocationCodeAndSmdgCodeIsNotNull(any());
+    verify(uiFacilityRepository, times(1)).findFacilitiesByUNLocationCodeAndFacilitySMDGCodeIsNotNull(any());
     assertThat(terminals.size()).isEqualTo(2);
     assertThat(terminals.get(0)).isInstanceOf(TerminalTO.class);
-    assertThat(terminals.get(1).unLocationCode()).isEqualTo("DEHAM");
-    assertThat(terminals.get(1).smdgCode()).isEqualTo("SWT");
+    assertThat(terminals.get(1).UNLocationCode()).isEqualTo("DEHAM");
+    assertThat(terminals.get(1).facilitySMDGCode()).isEqualTo("SWT");
   }
 
   @Test
   @DisplayName("No Facilities found should result in an empty list")
   void testNoFacilitiesFound() {
-    given(uiFacilityRepository.findFacilitiesByUnLocationCodeAndSmdgCodeIsNotNull(any()))
+    given(uiFacilityRepository.findFacilitiesByUNLocationCodeAndFacilitySMDGCodeIsNotNull(any()))
         .willReturn(Collections.emptyList());
 
     List<TerminalTO> terminals = terminalService.findFacilitiesForUnLocationCode("NLRTM");
 
-    verify(uiFacilityRepository, times(1)).findFacilitiesByUnLocationCodeAndSmdgCodeIsNotNull(any());
+    verify(uiFacilityRepository, times(1)).findFacilitiesByUNLocationCodeAndFacilitySMDGCodeIsNotNull(any());
     assertThat(terminals.size()).isEqualTo(0);
   }
 }

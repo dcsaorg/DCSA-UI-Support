@@ -38,6 +38,6 @@ public class CarriersIT {
 
     // Just test a single carrier
     CarrierTO everGreen = carriers.stream().filter(carrier -> carrier.smdgCode().equals("EMC")).findFirst().get();
-    assertEquals("Evergreen Marine Corporation", everGreen.name());
+    assertEquals("Evergreen Marine Corporation", everGreen.carrierName());
   }
 }

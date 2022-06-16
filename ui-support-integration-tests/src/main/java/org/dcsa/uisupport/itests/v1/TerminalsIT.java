@@ -37,10 +37,10 @@ public class TerminalsIT {
       .jsonPath().getList(".", TerminalTO.class)
       ;
 
-    assertTrue(terminals.stream().noneMatch(terminal -> terminal.smdgCode() == null));
+    assertTrue(terminals.stream().noneMatch(terminal -> terminal.facilitySMDGCode() == null));
 
     // Just test a single carrier
-    TerminalTO apmTerminal = terminals.stream().filter(terminal -> terminal.smdgCode().equals("APM")).findFirst().get();
-    assertEquals("APM TERMINALS ROTTERDAM", apmTerminal.name());
+    TerminalTO apmTerminal = terminals.stream().filter(terminal -> terminal.facilitySMDGCode().equals("APM")).findFirst().get();
+    assertEquals("APM TERMINALS ROTTERDAM", apmTerminal.facilityName());
   }
 }
