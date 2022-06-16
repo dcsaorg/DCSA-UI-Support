@@ -5,55 +5,45 @@ import lombok.Builder;
 import javax.validation.constraints.Size;
 
 public record TimestampDefinitionTO(
-  @JsonProperty("id")
   String id,
 
-  @JsonProperty("timestampTypeName")
   String timestampTypeName,
 
-  @Size(max = 3) @JsonProperty("publisherRole")
+  @Size(max = 3)
   String publisherRole,
 
-  @Size(max = 3) @JsonProperty("primaryReceiver")
+  @Size(max = 3)
   String primaryReceiver,
 
-  @Size(max = 3) @JsonProperty("eventClassifierCode")
+  @Size(max = 3)
   String eventClassifierCode,
 
-  @Size(max = 4) @JsonProperty("operationsEventTypeCode")
+  @Size(max = 4)
   String operationsEventTypeCode,
 
-  @Size(max = 4) @JsonProperty("portCallPhaseTypeCode")
+  @Size(max = 4)
   String portCallPhaseTypeCode,
 
-  @Size(max = 4) @JsonProperty("portCallServiceTypeCode")
+  @Size(max = 4)
   String portCallServiceTypeCode,
 
-  @Size(max = 4) @JsonProperty("facilityTypeCode")
+  @Size(max = 4)
   String facilityTypeCode,
 
-  @JsonProperty("isBerthLocationNeeded")
   Boolean isBerthLocationNeeded,
 
-  @JsonProperty("isPBPLocationNeeded")
   Boolean isPBPLocationNeeded,
 
-  @JsonProperty("isTerminalNeeded")
   Boolean isTerminalNeeded,
 
-  @JsonProperty("isVesselPositionNeeded")
   Boolean isVesselPositionNeeded,
 
-  @JsonProperty("negotiationCycle")
   String negotiationCycle,
 
-  @JsonProperty("providedInStandard")
   String providedInStandard,
 
-  @JsonProperty("acceptTimestampDefinition")
   String acceptTimestampDefinition,
 
-  @JsonProperty("rejectTimestampDefinition")
   String rejectTimestampDefinition
 ) {
   @Builder // workaround for intellij issue

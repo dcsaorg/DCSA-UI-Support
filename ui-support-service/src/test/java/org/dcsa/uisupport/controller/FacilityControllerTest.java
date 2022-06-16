@@ -35,9 +35,9 @@ class FacilityControllerTest {
         .thenReturn(
             List.of(
                 TerminalTO.builder()
-                    .unLocationCode("NLRTM")
-                    .name("UNIPORT WAALHAVEN TERMINAL")
-                    .smdgCode("UMTR")
+                    .UNLocationCode("NLRTM")
+                    .facilityName("UNIPORT WAALHAVEN TERMINAL")
+                    .facilitySMDGCode("UMTR")
                     .build()));
 
     mockMvc
