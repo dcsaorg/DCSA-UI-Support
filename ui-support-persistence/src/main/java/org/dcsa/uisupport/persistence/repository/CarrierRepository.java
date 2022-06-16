@@ -7,4 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface CarrierRepository extends JpaRepository<Carrier, UUID> {}
+public interface CarrierRepository extends JpaRepository<Carrier, UUID> {
+  Carrier findBySmdgCode(String smdgCode);
+
+  Carrier findByNmftaCode(String nmftaCode);
+}
