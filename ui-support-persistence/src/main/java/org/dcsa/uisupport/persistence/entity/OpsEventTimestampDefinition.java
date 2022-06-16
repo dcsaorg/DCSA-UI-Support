@@ -15,7 +15,7 @@ import java.util.UUID;
 @Setter(AccessLevel.PRIVATE)
 @Entity
 @Table(name = "ops_event_timestamp_definition")
-public class OpsEventTimestampDefinitionForUI {
+public class OpsEventTimestampDefinition {
 
   @Id
   private UUID eventID;

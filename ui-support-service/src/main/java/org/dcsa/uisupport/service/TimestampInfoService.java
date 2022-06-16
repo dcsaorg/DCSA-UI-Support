@@ -4,22 +4,18 @@ import lombok.RequiredArgsConstructor;
 import org.dcsa.jit.mapping.OperationsEventMapper;
 import org.dcsa.jit.persistence.entity.OperationsEvent;
 import org.dcsa.jit.persistence.entity.TimestampDefinition;
-import org.dcsa.jit.persistence.entity.TransportCall;
 import org.dcsa.jit.persistence.entity.UnmappedEvent;
 import org.dcsa.jit.persistence.repository.OperationsEventRepository;
-import org.dcsa.jit.persistence.repository.TimestampDefinitionRepository;
 import org.dcsa.jit.persistence.repository.UnmappedEventRepository;
 import org.dcsa.jit.transferobjects.OperationsEventTO;
-import org.dcsa.skernel.domain.persistence.entity.Location;
 import org.dcsa.uisupport.mapping.TimestampDefinitionMapper;
-import org.dcsa.uisupport.persistence.entity.OpsEventTimestampDefinitionForUI;
+import org.dcsa.uisupport.persistence.entity.OpsEventTimestampDefinition;
 import org.dcsa.uisupport.persistence.entity.PendingEvent;
 import org.dcsa.uisupport.persistence.repository.OpsEventTimestampDefinitionRepositoryForUI;
 import org.dcsa.uisupport.persistence.repository.PendingEventRepository;
 import org.dcsa.uisupport.transferobjects.TimestampDefinitionTO;
 import org.dcsa.uisupport.transferobjects.TimestampInfoTO;
 import org.dcsa.uisupport.transferobjects.enums.EventDeliveryStatus;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -66,13 +62,13 @@ public class TimestampInfoService {
         .collect(Collectors.toList());
   }
 
-  private static Specification<OpsEventTimestampDefinitionForUI> fetchSpec(
+  private static Specification<OpsEventTimestampDefinition> fetchSpec(
       String transportCallID, String negotiationCycle) {
     return (root, query, builder) -> {
       // Eager load *all the entities* -
       // being a "dump every timestamp" query the laziness hurts a lot.
-      Join<OpsEventTimestampDefinitionForUI, OperationsEvent> opsEventJoin = root.join("operationsEvent");
-      Join<OpsEventTimestampDefinitionForUI, TimestampDefinition> timestampDefinitionJoin = root.join("timestampDefinition");
+      Join<OpsEventTimestampDefinition, OperationsEvent> opsEventJoin = root.join("operationsEvent");
+      Join<OpsEventTimestampDefinition, TimestampDefinition> timestampDefinitionJoin = root.join("timestampDefinition");
 
       List<Predicate> predicates = new ArrayList<>();
 
