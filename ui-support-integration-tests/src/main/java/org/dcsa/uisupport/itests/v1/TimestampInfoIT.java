@@ -28,11 +28,12 @@ public class TimestampInfoIT {
             .statusCode(200)
             .contentType(ContentType.JSON)
             .body("size()", greaterThanOrEqualTo(1))
-            //            .body(
-            //                "operationsEventTO.eventID",
-            //                anyOf(
-            //                    equalTo("d330b6f5-edcb-4e9e-a09f-e98e91deba95"),
-            //                    equalTo("538312da-674c-4278-bf9f-10e2a7c018e3")))
+            .body("operationsEventTO", notNullValue())
+            .body("operationsEventTO.publisher", notNullValue())
+            .body("operationsEventTO.transportCall", notNullValue())
+            .body("operationsEventTO.eventLocation", notNullValue())
+            .body("timestampDefinitionTO", notNullValue())
+            .body("eventDeliveryStatus", notNullValue())
             .extract()
             .body()
             .jsonPath()
@@ -50,6 +51,9 @@ public class TimestampInfoIT {
         .statusCode(200)
         .contentType(ContentType.JSON)
         .body("size()", greaterThanOrEqualTo(1))
+        .body(
+            "operationsEventTO.transportCall.transportCallReference",
+            everyItem(equalTo("TC-REF-08_03-B")))
         .extract()
         .body()
         .jsonPath()
@@ -68,6 +72,21 @@ public class TimestampInfoIT {
         .contentType(ContentType.JSON)
         .body("size()", greaterThanOrEqualTo(1))
         .body("timestampDefinitionTO.negotiationCycle", everyItem(equalTo("TA-Berth")))
+        .extract()
+        .body()
+        .jsonPath()
+        .getList(".", TimestampInfoTO.class);
+
+    given()
+        .contentType("application/json")
+        .queryParam("negotiationCycle", "T-Pilotage-Arrival")
+        .get("/v1/unofficial/timestamp-info")
+        .then()
+        .assertThat()
+        .statusCode(200)
+        .contentType(ContentType.JSON)
+        .body("size()", greaterThanOrEqualTo(1))
+        .body("timestampDefinitionTO.negotiationCycle", everyItem(equalTo("T-Pilotage-Arrival")))
         .extract()
         .body()
         .jsonPath()
