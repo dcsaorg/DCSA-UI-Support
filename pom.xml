@@ -87,6 +87,11 @@
 				<artifactId>dcsa-jit-persistence</artifactId>
 				<version>${jit.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.dcsa.jit</groupId>
+				<artifactId>dcsa-jit-service</artifactId>
+				<version>${jit.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
