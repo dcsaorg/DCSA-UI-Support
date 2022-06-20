@@ -20,8 +20,8 @@ public class TimestampInfoController {
 
   @GetMapping
   public List<TimestampInfoTO> getTerminals(
-      @RequestParam(value = "transportCallID", required = false) String unLocationCode,
+      @RequestParam(value = "transportCallID", required = false) String transportCallID,
       @RequestParam(value = "negotiationCycle", required = false) String negotiationCycle) {
-    return timestampInfoService.findAll(unLocationCode, negotiationCycle);
+    return timestampInfoService.findAll(transportCallID, negotiationCycle);
   }
 }

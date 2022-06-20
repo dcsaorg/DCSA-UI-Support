@@ -1,139 +1,145 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.dcsa</groupId>
-        <artifactId>dcsa-bom</artifactId>
-        <version>1.1-SNAPSHOT</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
-    <name>DCSA-UI-Support</name>
-    <groupId>org.dcsa.uisupport</groupId>
-    <artifactId>dcsa-ui-support-parent</artifactId>
-    <version>${revision}${sha1}${changelist}</version>
-    <packaging>pom</packaging>
-    <description>Just In Time Port Call Optimization</description>
+				 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.dcsa</groupId>
+		<artifactId>dcsa-bom</artifactId>
+		<version>1.1-SNAPSHOT</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<name>DCSA-UI-Support</name>
+	<groupId>org.dcsa.uisupport</groupId>
+	<artifactId>dcsa-ui-support-parent</artifactId>
+	<version>${revision}${sha1}${changelist}</version>
+	<packaging>pom</packaging>
+	<description>Just In Time Port Call Optimization</description>
 
-    <properties>
-        <!-- Define DCSA-UI-SUPPORT version -->
-        <revision>0.0.2</revision>
-        <sha1/>
-        <changelist>-SNAPSHOT</changelist>
-        <!-- End: Define DCSA-SUPPORT version -->
+	<properties>
+		<!-- Define DCSA-UI-SUPPORT version -->
+		<revision>0.0.2</revision>
+		<sha1/>
+		<changelist>-SNAPSHOT</changelist>
+		<!-- End: Define DCSA-SUPPORT version -->
 
-        <!-- Define Shared Kernel version -->
-        <dcsa.shared-kernel.version>0.1.0</dcsa.shared-kernel.version>
-        <dcsa.shared-kernel.tag/>
-        <dcsa.shared-kernel.artifacttype>-SNAPSHOT</dcsa.shared-kernel.artifacttype>
-        <shared-kernel.version>${dcsa.shared-kernel.version}${dcsa.shared-kernel.tag}${dcsa.shared-kernel.artifacttype}</shared-kernel.version>
-        <!-- End: Define Shared kernel version -->
+		<!-- Define Shared Kernel version -->
+		<dcsa.shared-kernel.version>0.1.0</dcsa.shared-kernel.version>
+		<dcsa.shared-kernel.tag/>
+		<dcsa.shared-kernel.artifacttype>-SNAPSHOT</dcsa.shared-kernel.artifacttype>
+		<shared-kernel.version>${dcsa.shared-kernel.version}${dcsa.shared-kernel.tag}${dcsa.shared-kernel.artifacttype}
+		</shared-kernel.version>
+		<!-- End: Define Shared kernel version -->
 
-			<!-- Define Shared Kernel version -->
-			<dcsa.jit.version>1.1.0</dcsa.jit.version>
-			<dcsa.jit.tag/>
-			<dcsa.jit.artifacttype>-SNAPSHOT</dcsa.jit.artifacttype>
-			<jit.version>${dcsa.jit.version}${dcsa.jit.tag}${dcsa.jit.artifacttype}</jit.version>
-			<!-- End: Define Shared kernel version -->
-    </properties>
+		<!-- Define Shared Kernel version -->
+		<dcsa.jit.version>1.1.0</dcsa.jit.version>
+		<dcsa.jit.tag/>
+		<dcsa.jit.artifacttype>-SNAPSHOT</dcsa.jit.artifacttype>
+		<jit.version>${dcsa.jit.version}${dcsa.jit.tag}${dcsa.jit.artifacttype}</jit.version>
+		<!-- End: Define Shared kernel version -->
+	</properties>
 
-    <modules>
-        <module>ui-support-transfer-obj</module>
-        <module>ui-support-persistence</module>
-        <module>ui-support-service</module>
-        <module>ui-support-integration-tests</module>
-    </modules>
+	<modules>
+		<module>ui-support-transfer-obj</module>
+		<module>ui-support-persistence</module>
+		<module>ui-support-service</module>
+		<module>ui-support-integration-tests</module>
+	</modules>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-    </dependencies>
+	<dependencies>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+	</dependencies>
 
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.dcsa.uisupport</groupId>
-                <artifactId>dcsa-ui-support-transfer-obj</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.dcsa.uisupport</groupId>
-                <artifactId>dcsa-ui-support-persistence</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.poi</groupId>
-                <artifactId>poi-ooxml</artifactId>
-                <version>5.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.dcsa.shared-kernel</groupId>
-                <artifactId>dcsa-shared-kernel-parent</artifactId>
-                <version>${shared-kernel.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.dcsa.jit</groupId>
-                <artifactId>dcsa-jit-transfer-obj</artifactId>
-                <version>${jit.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.dcsa.jit</groupId>
-                <artifactId>dcsa-jit-persistence</artifactId>
-                <version>${jit.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.dcsa.uisupport</groupId>
+				<artifactId>dcsa-ui-support-transfer-obj</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.dcsa.uisupport</groupId>
+				<artifactId>dcsa-ui-support-persistence</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml</artifactId>
+				<version>5.0.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.dcsa.shared-kernel</groupId>
+				<artifactId>dcsa-shared-kernel-parent</artifactId>
+				<version>${shared-kernel.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.dcsa.jit</groupId>
+				<artifactId>dcsa-jit-transfer-obj</artifactId>
+				<version>${jit.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.dcsa.jit</groupId>
+				<artifactId>dcsa-jit-persistence</artifactId>
+				<version>${jit.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.dcsa.jit</groupId>
+				<artifactId>dcsa-jit-service</artifactId>
+				<version>${jit.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
-    <repositories>
-        <repository>
-            <id>central</id>
-            <name>Maven Central</name>
-            <url>https://repo1.maven.org/maven2</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
+	<repositories>
+		<repository>
+			<id>central</id>
+			<name>Maven Central</name>
+			<url>https://repo1.maven.org/maven2</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
 
-        <repository>
-            <id>github</id>
-            <name>GitHub DCSA Backend</name>
-            <url>https://maven.pkg.github.com/dcsaorg/DCSA-Core</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
-    </repositories>
+		<repository>
+			<id>github</id>
+			<name>GitHub DCSA Backend</name>
+			<url>https://maven.pkg.github.com/dcsaorg/DCSA-Core</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</repository>
+	</repositories>
 
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub OWNER Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/dcsaorg/DCSA-OVS</url>
-        </repository>
-    </distributionManagement>
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>GitHub OWNER Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/dcsaorg/DCSA-OVS</url>
+		</repository>
+	</distributionManagement>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>
