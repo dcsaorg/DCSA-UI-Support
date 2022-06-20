@@ -2,10 +2,7 @@ package org.dcsa.uisupport.service;
 
 import lombok.RequiredArgsConstructor;
 import org.dcsa.jit.mapping.OperationsEventMapper;
-import org.dcsa.jit.persistence.entity.OperationsEvent;
-import org.dcsa.jit.persistence.entity.OpsEventTimestampDefinition;
-import org.dcsa.jit.persistence.entity.TimestampDefinition;
-import org.dcsa.jit.persistence.entity.UnmappedEvent;
+import org.dcsa.jit.persistence.entity.*;
 import org.dcsa.jit.persistence.repository.OperationsEventRepository;
 import org.dcsa.jit.persistence.repository.UnmappedEventRepository;
 import org.dcsa.jit.transferobjects.OperationsEventTO;
@@ -24,6 +21,7 @@ import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,12 +66,13 @@ public class TimestampInfoService {
       // Eager load *all the entities* -
       // being a "dump every timestamp" query the laziness hurts a lot.
       Join<OpsEventTimestampDefinition, OperationsEvent> opsEventJoin = root.join("operationsEvent");
+      Join<OperationsEvent, TransportCall> operationsEventTransportCallJoin = opsEventJoin.join("transportCall");
       Join<OpsEventTimestampDefinition, TimestampDefinition> timestampDefinitionJoin = root.join("timestampDefinition");
 
       List<Predicate> predicates = new ArrayList<>();
 
       if (null != transportCallID) {
-        Predicate predicate = builder.equal(opsEventJoin.get("transportCallId"), transportCallID);
+        Predicate predicate = builder.equal(operationsEventTransportCallJoin.get("id"), UUID.fromString(transportCallID));
         predicates.add(predicate);
       }
 
