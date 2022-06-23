@@ -8,6 +8,8 @@ import org.dcsa.jit.persistence.repository.VesselRepository;
 import org.dcsa.jit.transferobjects.VesselTO;
 import org.dcsa.jit.transferobjects.enums.CarrierCodeListProvider;
 import org.dcsa.skernel.errors.exceptions.ConcreteRequestErrorMessageException;
+import org.dcsa.skernel.infrastructure.pagination.Cursor;
+import org.dcsa.skernel.infrastructure.pagination.PagedResult;
 import org.dcsa.uisupport.persistence.repository.CarrierRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,13 @@ public class VesselService {
   private final VesselRepository vesselRepository;
   private final CarrierRepository carrierRepository;
   private final VesselMapper vesselMapper;
+
+  public PagedResult<VesselTO> findAll(Cursor cursor) {
+    return new PagedResult<>(
+      vesselRepository.findAll(cursor.toPageRequest()),
+      vesselMapper::toTO
+    );
+  }
 
   public VesselTO fetchVessel(final UUID id) {
     Optional<Vessel> foundVessel = vesselRepository.findById(id);
