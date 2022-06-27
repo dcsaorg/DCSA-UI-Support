@@ -46,6 +46,7 @@ public class TimestampDefinitionIT {
       .operationsEventTypeCode("STRT")
       .portCallPhaseTypeCode("OUTB")
       .portCallServiceTypeCode("TOWG")
+      .portCallPhase("UC48-OUTBP")
       .isBerthLocationNeeded(false)
       .isPBPLocationNeeded(false)
       .isTerminalNeeded(true)

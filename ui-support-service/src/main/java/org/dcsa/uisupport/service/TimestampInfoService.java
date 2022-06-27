@@ -3,7 +3,6 @@ package org.dcsa.uisupport.service;
 import lombok.RequiredArgsConstructor;
 import org.dcsa.jit.mapping.OperationsEventMapper;
 import org.dcsa.jit.persistence.entity.*;
-import org.dcsa.jit.persistence.repository.OperationsEventRepository;
 import org.dcsa.jit.persistence.repository.UnmappedEventRepository;
 import org.dcsa.jit.transferobjects.OperationsEventTO;
 import org.dcsa.uisupport.mapping.TimestampDefinitionMapper;
@@ -27,17 +26,15 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class TimestampInfoService {
-
-  private final OperationsEventRepository operationsEventRepository;
   private final UnmappedEventRepository unmappedEventRepository;
   private final PendingEventRepository pendingEventRepository;
   private final OpsEventTimestampDefinitionRepositoryForUI opsEventTimestampDefinitionRepository;
   private final TimestampDefinitionMapper timestampDefinitionMapper;
   private final OperationsEventMapper operationsEventMapper;
 
-  public List<TimestampInfoTO> findAll(String transportCallID, String negotiationCycle) {
+  public List<TimestampInfoTO> findAll(String transportCallID, String negotiationCycle, String portCallPhase) {
     return opsEventTimestampDefinitionRepository
-        .findAll(fetchSpec(transportCallID, negotiationCycle))
+        .findAll(fetchSpec(transportCallID, negotiationCycle, portCallPhase))
         .stream()
         .map(
             opsEventTimestampDefinition -> {
@@ -61,7 +58,7 @@ public class TimestampInfoService {
   }
 
   private static Specification<OpsEventTimestampDefinition> fetchSpec(
-      String transportCallID, String negotiationCycle) {
+    String transportCallID, String negotiationCycle, String portCallPhase) {
     return (root, query, builder) -> {
       // Eager load *all the entities* -
       // being a "dump every timestamp" query the laziness hurts a lot.
@@ -78,6 +75,11 @@ public class TimestampInfoService {
 
       if (null != negotiationCycle) {
         Predicate predicate = builder.equal(timestampDefinitionJoin.get("negotiationCycle"), negotiationCycle);
+        predicates.add(predicate);
+      }
+
+      if (null != portCallPhase) {
+        Predicate predicate = builder.equal(timestampDefinitionJoin.get("portCallPhase"), portCallPhase);
         predicates.add(predicate);
       }
 

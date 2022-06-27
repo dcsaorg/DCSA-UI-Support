@@ -1,6 +1,5 @@
 package org.dcsa.uisupport.transferobjects;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import javax.validation.constraints.Size;
 
@@ -29,6 +28,9 @@ public record TimestampDefinitionTO(
 
   @Size(max = 4)
   String facilityTypeCode,
+
+  @Size(max = 100)
+  String portCallPhase,
 
   Boolean isBerthLocationNeeded,
 
