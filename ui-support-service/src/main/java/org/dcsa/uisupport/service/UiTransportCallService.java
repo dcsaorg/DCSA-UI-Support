@@ -72,7 +72,7 @@ public class UiTransportCallService {
       Location.builder()
         .id(UUID.randomUUID().toString())
         .UNLocationCode(transportCallTO.UNLocationCode())
-        .facility(findFacility(transportCallTO).orElse(null))
+        .facility(findFacility(transportCallTO))
         .build()
     );
     org.dcsa.jit.persistence.entity.Service service =
@@ -99,16 +99,19 @@ public class UiTransportCallService {
       .build();
   }
 
-  private Optional<Facility> findFacility(TransportCallTO transportCallTO) {
+  private Facility findFacility(TransportCallTO transportCallTO) {
     if (transportCallTO.facilityCodeListProvider() != null) {
-      return switch (transportCallTO.facilityCodeListProvider()) {
+      return (switch (transportCallTO.facilityCodeListProvider()) {
         case SMDG ->
           facilityRepository.findByUNLocationCodeAndFacilitySMDGCode(transportCallTO.UNLocationCode(), transportCallTO.facilityCode());
         case BIC ->
           facilityRepository.findByUNLocationCodeAndFacilityBICCode(transportCallTO.UNLocationCode(), transportCallTO.facilityCode());
-      };
+      }).orElseThrow(() ->
+        ConcreteRequestErrorMessageException.invalidInput(
+          "No facility found with " + transportCallTO.facilityCodeListProvider() + " code = '" + transportCallTO.facilityCode()
+            + "' and UNLocationCode = '" + transportCallTO.UNLocationCode() + "'"));
     } else {
-      return Optional.empty();
+      return null;
     }
   }
 }

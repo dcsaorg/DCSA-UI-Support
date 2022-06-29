@@ -45,7 +45,7 @@ public class TransportCallWithTimestampsIT {
       .importVoyageNumber("2106W")
       .carrierServiceCode("TNT1")
       .modeOfTransport(ModeOfTransport.VESSEL)
-      .UNLocationCode("DEHAM")
+      .UNLocationCode("AEJEA")
       .facilityCode("DPWJA")
       .facilityCodeListProvider(FacilityCodeListProvider.SMDG)
       .vessel(VesselTO.builder().vesselIMONumber("1234567").build())
