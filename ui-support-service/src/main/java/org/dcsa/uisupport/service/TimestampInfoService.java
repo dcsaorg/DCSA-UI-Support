@@ -31,10 +31,10 @@ public class TimestampInfoService {
   private final OpsEventTimestampDefinitionRepositoryForUI opsEventTimestampDefinitionRepository;
   private final TimestampDefinitionMapper timestampDefinitionMapper;
   private final OperationsEventMapper operationsEventMapper;
+  public List<TimestampInfoTO> findAll(String transportCallID, String negotiationCycle, String portCallPart) {
 
-  public List<TimestampInfoTO> findAll(String transportCallID, String negotiationCycle, String portCallPhase) {
     return opsEventTimestampDefinitionRepository
-        .findAll(fetchSpec(transportCallID, negotiationCycle, portCallPhase))
+        .findAll(fetchSpec(transportCallID, negotiationCycle, portCallPart))
         .stream()
         .map(
             opsEventTimestampDefinition -> {
@@ -58,7 +58,7 @@ public class TimestampInfoService {
   }
 
   private static Specification<OpsEventTimestampDefinition> fetchSpec(
-    String transportCallID, String negotiationCycle, String portCallPhase) {
+    String transportCallID, String negotiationCycle, String portCallPart) {
     return (root, query, builder) -> {
       // Eager load *all the entities* -
       // being a "dump every timestamp" query the laziness hurts a lot.
@@ -78,8 +78,8 @@ public class TimestampInfoService {
         predicates.add(predicate);
       }
 
-      if (null != portCallPhase) {
-        Predicate predicate = builder.equal(timestampDefinitionJoin.get("portCallPhase"), portCallPhase);
+      if (null != portCallPart) {
+        Predicate predicate = builder.equal(timestampDefinitionJoin.get("portCallPart"), portCallPart);
         predicates.add(predicate);
       }
 
