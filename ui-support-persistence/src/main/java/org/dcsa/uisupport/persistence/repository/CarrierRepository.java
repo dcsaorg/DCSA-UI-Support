@@ -1,6 +1,6 @@
 package org.dcsa.uisupport.persistence.repository;
 
-import org.dcsa.jit.persistence.entity.Carrier;
+import org.dcsa.skernel.domain.persistence.entity.Carrier;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
