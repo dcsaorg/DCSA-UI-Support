@@ -22,7 +22,7 @@ public class TimestampInfoController {
   public List<TimestampInfoTO> getTerminals(
       @RequestParam(value = "transportCallID", required = false) String transportCallID,
       @RequestParam(value = "negotiationCycle", required = false) String negotiationCycle,
-      @RequestParam(value = "portCallPhase", required = false) String portCallPhase) {
-    return timestampInfoService.findAll(transportCallID, negotiationCycle, portCallPhase);
+      @RequestParam(value = "portCallPart", required = false) String portCallPart) {
+    return timestampInfoService.findAll(transportCallID, negotiationCycle, portCallPart);
   }
 }

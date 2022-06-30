@@ -30,7 +30,7 @@ public record TimestampDefinitionTO(
   String facilityTypeCode,
 
   @Size(max = 100)
-  String portCallPhase,
+  String portCallPart,
 
   Boolean isBerthLocationNeeded,
 
