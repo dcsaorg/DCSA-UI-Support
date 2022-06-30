@@ -33,4 +33,7 @@ public class TransportCallWithTimestampsTO {
 
   @JsonProperty("atdBerthDateTime")
   private OffsetDateTime atdBerthDateTime;
+
+  private Integer vesselDraft;
+  private Integer milesRemainingToDestination;
 }

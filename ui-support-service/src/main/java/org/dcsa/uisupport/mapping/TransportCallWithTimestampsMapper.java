@@ -20,6 +20,8 @@ public class TransportCallWithTimestampsMapper {
       .atdBerthDateTime(src.getAtdBerthDateTime())
       .etaBerthDateTime(src.getEtaBerthDateTime())
       .latestEventCreatedDateTime(src.getLatestEventCreatedDateTime())
+      .vesselDraft(src.getVesselDraft())
+      .milesRemainingToDestination(src.getMilesRemainingToDestination())
       .build();
   }
 }
