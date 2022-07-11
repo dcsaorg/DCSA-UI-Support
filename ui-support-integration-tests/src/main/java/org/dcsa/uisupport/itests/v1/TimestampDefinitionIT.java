@@ -6,7 +6,9 @@ import org.dcsa.uisupport.transferobjects.TimestampDefinitionTO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
@@ -21,40 +23,92 @@ public class TimestampDefinitionIT {
 
   @Test
   public void testGetTimestampDefinitions() {
-    List<TimestampDefinitionTO> timestampDefinitions = given()
-      .contentType("application/json")
-      .get("/v1/unofficial/timestamp-definitions")
-      .then()
-      .assertThat()
-      .statusCode(200)
-      .contentType(ContentType.JSON)
-      .body("size()", greaterThanOrEqualTo(9))
-      .extract()
-      .body()
-      .jsonPath().getList(".", TimestampDefinitionTO.class)
-      ;
+    List<TimestampDefinitionTO> timestampDefinitions =
+        given()
+            .contentType("application/json")
+            .get("/v1/unofficial/timestamp-definitions")
+            .then()
+            .assertThat()
+            .statusCode(200)
+            .contentType(ContentType.JSON)
+            .body("size()", greaterThanOrEqualTo(9))
+            .extract()
+            .body()
+            .jsonPath()
+            .getList(".", TimestampDefinitionTO.class);
 
     assertTrue(timestampDefinitions.stream().noneMatch(td -> td.id() == null));
 
     // Just test a single TimestampDefinition
-    TimestampDefinitionTO expected = TimestampDefinitionTO.builder()
-      .id("UC48-OUTB")
-      .timestampTypeName("ATS-Towage (Outbound)")
-      .publisherRole("TWG")
-      .primaryReceiver("ATH")
-      .eventClassifierCode("ACT")
-      .operationsEventTypeCode("STRT")
-      .portCallPhaseTypeCode("OUTB")
-      .portCallServiceTypeCode("TOWG")
-      .portCallPart("UC48-OUTBP")
-      .isBerthLocationNeeded(false)
-      .isPBPLocationNeeded(false)
-      .isTerminalNeeded(true)
-      .isVesselPositionNeeded(true)
-      .negotiationCycle("T-Towage-Outbound")
-      .providedInStandard("jit1_1")
-      .build();
-    TimestampDefinitionTO actual = timestampDefinitions.stream().filter(td -> td.id().equals("UC48-OUTB")).findFirst().get();
+    TimestampDefinitionTO expected =
+        TimestampDefinitionTO.builder()
+            .id("TS197")
+            .timestampTypeName("ATS-Towage (Outbound)")
+            .publisherRole(null)
+            .primaryReceiver(null)
+            .eventClassifierCode("ACT")
+            .operationsEventTypeCode("STRT")
+            .portCallPhaseTypeCode("OUTB")
+            .portCallServiceTypeCode("TOWG")
+            .portCallPart("Port Departure Execution")
+            .isBerthLocationNeeded(true)
+            .isPBPLocationNeeded(false)
+            .isAnchorageLocationNeeded(false)
+            .isTerminalNeeded(true)
+            .isVesselPositionNeeded(false)
+            .providedInStandard("jit1_1")
+            .facilityTypeCode("BRTH")
+            .publisherPattern(
+                Stream.of(
+                        new LinkedHashMap<String, String>() {
+                          {
+                            put("id", "CA2TWG");
+                            put("publisherRole", "CA");
+                            put("primaryReceiver", "TWG");
+                          }
+                        },
+                        new LinkedHashMap<String, String>() {
+                          {
+                            put("id", "TWG2CA");
+                            put("publisherRole", "TWG");
+                            put("primaryReceiver", "CA");
+                          }
+                        },
+                        new LinkedHashMap<String, String>() {
+                          {
+                            put("id", "VSL2TWG");
+                            put("publisherRole", "VSL");
+                            put("primaryReceiver", "TWG");
+                          }
+                        },
+                        new LinkedHashMap<String, String>() {
+                          {
+                            put("id", "AG2TWG");
+                            put("publisherRole", "AG");
+                            put("primaryReceiver", "TWG");
+                          }
+                        },
+                        new LinkedHashMap<String, String>() {
+                          {
+                            put("id", "TWG2VSL");
+                            put("publisherRole", "TWG");
+                            ;
+                            put("primaryReceiver", "VSL");
+                          }
+                        },
+                        new LinkedHashMap<String, String>() {
+                          {
+                            put("id", "TWG2AG");
+                            put("publisherRole", "TWG");
+                            put("primaryReceiver", "AG");
+                          }
+                        })
+                    .collect(Collectors.toCollection(HashSet::new)))
+            .build();
+
+    TimestampDefinitionTO actual =
+        timestampDefinitions.stream().filter(td -> td.id().equals("TS197")).findFirst().get();
+    assertEquals(expected, actual);
     assertEquals(expected, actual);
   }
 }
