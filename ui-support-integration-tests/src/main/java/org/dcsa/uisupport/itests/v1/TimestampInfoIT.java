@@ -4,9 +4,8 @@ import io.restassured.http.ContentType;
 import org.dcsa.uisupport.itests.config.RestAssuredConfigurator;
 import org.dcsa.uisupport.transferobjects.TimestampInfoTO;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
@@ -19,25 +18,25 @@ public class TimestampInfoIT {
 
   @Test
   public void testGetTimestampDefinitions() {
-    List<TimestampInfoTO> timestampDefinitions =
-        given()
-            .contentType("application/json")
-            .get("/v1/unofficial/timestamp-info")
-            .then()
-            .assertThat()
-            .statusCode(200)
-            .contentType(ContentType.JSON)
-            .body("size()", greaterThanOrEqualTo(1))
-            .body("operationsEventTO", notNullValue())
-            .body("operationsEventTO.publisher", notNullValue())
-            .body("operationsEventTO.transportCall", notNullValue())
-            .body("operationsEventTO.eventLocation", notNullValue())
-            .body("timestampDefinitionTO", notNullValue())
-            .body("eventDeliveryStatus", notNullValue())
-            .extract()
-            .body()
-            .jsonPath()
-            .getList(".", TimestampInfoTO.class);
+
+    given()
+        .contentType("application/json")
+        .get("/v1/unofficial/timestamp-info")
+        .then()
+        .assertThat()
+        .statusCode(200)
+        .contentType(ContentType.JSON)
+        .body("size()", greaterThanOrEqualTo(1))
+        .body("operationsEventTO", notNullValue())
+        .body("operationsEventTO.publisherPattern", notNullValue())
+        .body("operationsEventTO.transportCall", notNullValue())
+        .body("operationsEventTO.eventLocation", notNullValue())
+        .body("timestampDefinitionTO", notNullValue())
+        .body("eventDeliveryStatus", notNullValue())
+        .extract()
+        .body()
+        .jsonPath()
+        .getList(".", TimestampInfoTO.class);
   }
 
   @Test
@@ -61,6 +60,7 @@ public class TimestampInfoIT {
   }
 
   @Test
+  @Disabled("TODO: DDT-1149")
   public void testGetTimestampWithQueryParamNegotiationCycle() {
     given()
         .contentType("application/json")

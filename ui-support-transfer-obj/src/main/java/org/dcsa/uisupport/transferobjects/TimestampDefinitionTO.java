@@ -2,17 +2,12 @@ package org.dcsa.uisupport.transferobjects;
 
 import lombok.Builder;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 public record TimestampDefinitionTO(
   String id,
 
   String timestampTypeName,
-
-  @Size(max = 3)
-  String publisherRole,
-
-  @Size(max = 3)
-  String primaryReceiver,
 
   @Size(max = 3)
   String eventClassifierCode,
@@ -36,17 +31,20 @@ public record TimestampDefinitionTO(
 
   Boolean isPBPLocationNeeded,
 
+  Boolean isAnchorageLocationNeeded,
+
   Boolean isTerminalNeeded,
 
   Boolean isVesselPositionNeeded,
-
   String negotiationCycle,
 
   String providedInStandard,
 
   String acceptTimestampDefinition,
 
-  String rejectTimestampDefinition
+  String rejectTimestampDefinition,
+
+  Set<PublisherPatternTO> publisherPattern
 ) {
   @Builder // workaround for intellij issue
   public TimestampDefinitionTO {}
