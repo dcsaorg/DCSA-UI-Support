@@ -4,6 +4,7 @@ import io.restassured.http.ContentType;
 import org.dcsa.uisupport.itests.config.RestAssuredConfigurator;
 import org.dcsa.uisupport.transferobjects.TimestampInfoTO;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
@@ -59,6 +60,7 @@ public class TimestampInfoIT {
   }
 
   @Test
+  @Disabled("TODO: DDT-1149")
   public void testGetTimestampWithQueryParamNegotiationCycle() {
     given()
         .contentType("application/json")

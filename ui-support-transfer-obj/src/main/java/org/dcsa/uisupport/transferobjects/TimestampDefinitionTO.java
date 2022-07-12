@@ -10,12 +10,6 @@ public record TimestampDefinitionTO(
   String timestampTypeName,
 
   @Size(max = 3)
-  String publisherRole,
-
-  @Size(max = 3)
-  String primaryReceiver,
-
-  @Size(max = 3)
   String eventClassifierCode,
 
   @Size(max = 4)
@@ -50,7 +44,7 @@ public record TimestampDefinitionTO(
 
   String rejectTimestampDefinition,
 
-  Set publisherPattern
+  Set<PublisherPatternTO> publisherPattern
 ) {
   @Builder // workaround for intellij issue
   public TimestampDefinitionTO {}

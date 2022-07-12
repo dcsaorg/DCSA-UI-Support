@@ -2,6 +2,7 @@ package org.dcsa.uisupport.itests.v1;
 
 import io.restassured.http.ContentType;
 import org.dcsa.uisupport.itests.config.RestAssuredConfigurator;
+import org.dcsa.uisupport.transferobjects.PublisherPatternTO;
 import org.dcsa.uisupport.transferobjects.TimestampDefinitionTO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -44,8 +45,6 @@ public class TimestampDefinitionIT {
         TimestampDefinitionTO.builder()
             .id("TS197")
             .timestampTypeName("ATS-Towage (Outbound)")
-            .publisherRole(null)
-            .primaryReceiver(null)
             .eventClassifierCode("ACT")
             .operationsEventTypeCode("STRT")
             .portCallPhaseTypeCode("OUTB")
@@ -58,51 +57,15 @@ public class TimestampDefinitionIT {
             .isVesselPositionNeeded(false)
             .providedInStandard("jit1_1")
             .facilityTypeCode("BRTH")
+            .negotiationCycle(null) // TODO: // TODO: FIX ME (Set in Timestamp Definition entity) DDT-1149
             .publisherPattern(
                 Stream.of(
-                        new LinkedHashMap<String, String>() {
-                          {
-                            put("id", "CA2TWG");
-                            put("publisherRole", "CA");
-                            put("primaryReceiver", "TWG");
-                          }
-                        },
-                        new LinkedHashMap<String, String>() {
-                          {
-                            put("id", "TWG2CA");
-                            put("publisherRole", "TWG");
-                            put("primaryReceiver", "CA");
-                          }
-                        },
-                        new LinkedHashMap<String, String>() {
-                          {
-                            put("id", "VSL2TWG");
-                            put("publisherRole", "VSL");
-                            put("primaryReceiver", "TWG");
-                          }
-                        },
-                        new LinkedHashMap<String, String>() {
-                          {
-                            put("id", "AG2TWG");
-                            put("publisherRole", "AG");
-                            put("primaryReceiver", "TWG");
-                          }
-                        },
-                        new LinkedHashMap<String, String>() {
-                          {
-                            put("id", "TWG2VSL");
-                            put("publisherRole", "TWG");
-                            ;
-                            put("primaryReceiver", "VSL");
-                          }
-                        },
-                        new LinkedHashMap<String, String>() {
-                          {
-                            put("id", "TWG2AG");
-                            put("publisherRole", "TWG");
-                            put("primaryReceiver", "AG");
-                          }
-                        })
+                        new PublisherPatternTO("CA2TWG", "CA", "TWG"),
+                        new PublisherPatternTO("TWG2CA", "TWG", "CA"),
+                        new PublisherPatternTO("VSL2TWG", "VSL", "TWG"),
+                        new PublisherPatternTO("AG2TWG", "AG", "TWG"),
+                        new PublisherPatternTO("TWG2VSL", "TWG", "VSL"),
+                        new PublisherPatternTO("TWG2AG", "TWG", "AG"))
                     .collect(Collectors.toCollection(HashSet::new)))
             .build();
 
