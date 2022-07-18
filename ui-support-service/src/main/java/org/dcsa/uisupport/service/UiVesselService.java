@@ -32,8 +32,8 @@ public class UiVesselService {
     );
   }
 
-  public VesselTO fetchVessel(final UUID id) {
-    Optional<Vessel> foundVessel = vesselRepository.findById(id);
+  public VesselTO fetchVesselByIMONumber(final String vesselIMONumber) {
+    Optional<Vessel> foundVessel = vesselRepository.findByVesselIMONumber(vesselIMONumber);
     return vesselMapper.toTO(
         foundVessel.orElseThrow(
             () -> ConcreteRequestErrorMessageException.notFound("Vessel not found.")));
@@ -97,9 +97,12 @@ public class UiVesselService {
   }
 
   @Transactional
-  public VesselTO updateVessel(final UUID id, final VesselTO request) {
+  public VesselTO updateVessel(final String vesselIMONumber, final VesselTO request) {
 
-    this.fetchVessel(id); // this will throw an error if vessel does not exist
+    Optional<Vessel> foundVessel = vesselRepository.findByVesselIMONumber(vesselIMONumber);
+    UUID id =
+      foundVessel.orElseThrow(
+        () -> ConcreteRequestErrorMessageException.notFound("Vessel not found.")).getId();
     Carrier carrierForRequestedVessel = this.findCarrierForVesselRequest(request);
     Vessel vessel =
         vesselMapper.toEntity(request).toBuilder()

@@ -36,7 +36,7 @@ public class VesselController {
     Cursor c =
       paginator.parseRequest(
         request,
-        // VESSEL_IM_ONUMBER is auto-generated and sadly correct because the plugin misreads
+        // VESSEL_IMO_NUMBER is auto-generated and sadly correct because the plugin misreads
         // the property name
         new CursorDefaults(limit, new Cursor.SortBy(Sort.Direction.DESC, Vessel_.VESSEL_IM_ONUMBER)));
 
@@ -46,10 +46,10 @@ public class VesselController {
     return result.content();
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/{vesselIMONumber}")
   @ResponseStatus(HttpStatus.OK)
-  public VesselTO get(@PathVariable UUID id) {
-    return uiVesselService.fetchVessel(id);
+  public VesselTO get(@PathVariable String vesselIMONumber) {
+    return uiVesselService.fetchVesselByIMONumber(vesselIMONumber);
   }
 
   @PostMapping
@@ -58,9 +58,9 @@ public class VesselController {
     return uiVesselService.createVessel(request);
   }
 
-  @PutMapping("/{id}")
+  @PutMapping("/{vesselIMONumber}")
   @ResponseStatus(HttpStatus.OK)
-  public VesselTO update(@PathVariable UUID id, @Valid @RequestBody VesselTO request) {
-    return uiVesselService.updateVessel(id, request);
+  public VesselTO update(@PathVariable String vesselIMONumber, @Valid @RequestBody VesselTO request) {
+    return uiVesselService.updateVessel(vesselIMONumber, request);
   }
 }
