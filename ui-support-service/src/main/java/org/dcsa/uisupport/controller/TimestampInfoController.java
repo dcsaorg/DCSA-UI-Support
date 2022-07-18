@@ -18,7 +18,7 @@ public class TimestampInfoController {
   private final TimestampInfoService timestampInfoService;
 
   @GetMapping
-  public List<TimestampInfoTO> getTerminals(
+  public List<TimestampInfoTO> getTimestampInfos(
       @RequestParam(value = "transportCallID", required = false) String transportCallID,
       @RequestParam(value = "negotiationCycle", required = false) String negotiationCycle,
       @RequestParam(value = "portCallPart", required = false) String portCallPart) {
