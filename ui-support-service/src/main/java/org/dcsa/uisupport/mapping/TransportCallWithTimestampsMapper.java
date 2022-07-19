@@ -2,10 +2,8 @@ package org.dcsa.uisupport.mapping;
 
 import lombok.RequiredArgsConstructor;
 import org.dcsa.jit.mapping.TransportCallMapper;
-import org.dcsa.jit.transferobjects.TransportCallTO;
 import org.dcsa.uisupport.persistence.entity.TransportCallWithTimestamps;
 import org.dcsa.uisupport.transferobjects.TransportCallWithTimestampsTO;
-import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,7 +19,7 @@ public class TransportCallWithTimestampsMapper {
       .etaBerthDateTime(src.getEtaBerthDateTime())
       .latestEventCreatedDateTime(src.getLatestEventCreatedDateTime())
       .vesselDraft(src.getVesselDraft())
-      .milesRemainingToDestination(src.getMilesRemainingToDestination())
+      .milesToDestinationPort(src.getMilesRemainingToDestination())
       .build();
   }
 }
