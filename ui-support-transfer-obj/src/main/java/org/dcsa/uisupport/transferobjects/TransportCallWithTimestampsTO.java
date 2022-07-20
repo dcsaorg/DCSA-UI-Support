@@ -35,5 +35,5 @@ public class TransportCallWithTimestampsTO {
   private OffsetDateTime atdBerthDateTime;
 
   private Integer vesselDraft;
-  private Integer milesRemainingToDestination;
+  private Integer milesToDestinationPort;
 }
