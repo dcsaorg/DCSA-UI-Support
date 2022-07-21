@@ -31,8 +31,8 @@ public class TransportCallWithTimestamps extends TransportCall {
   private OffsetDateTime atdBerthDateTime;
 
   @Column(name = "vessel_draft")
-  private Integer vesselDraft;
+  private Float vesselDraft;
 
   @Column(name = "miles_remaining_to_destination")
-  private Integer milesRemainingToDestination;
+  private Float milesRemainingToDestination;
 }
