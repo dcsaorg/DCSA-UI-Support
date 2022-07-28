@@ -57,7 +57,7 @@ public class TimestampDefinitionIT {
             .isVesselPositionNeeded(false)
             .providedInStandard("jit1_1")
             .facilityTypeCode("BRTH")
-            .negotiationCycle("T-Towage-Outbound") // TODO: // TODO: FIX ME (Set in Timestamp Definition entity) DDT-1149
+            .negotiationCycle("T-Towage-Outbound")
             .publisherPattern(
                 Stream.of(
                         new PublisherPatternTO("CA2TWG", "CA", "TWG"),
