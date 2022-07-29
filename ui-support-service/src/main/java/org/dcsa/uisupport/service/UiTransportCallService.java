@@ -69,7 +69,6 @@ public class UiTransportCallService {
 
     Location location = locationRepository.save(
       Location.builder()
-        .id(UUID.randomUUID().toString())
         .UNLocationCode(transportCallTO.UNLocationCode())
         .facility(findFacility(transportCallTO))
         .build()
