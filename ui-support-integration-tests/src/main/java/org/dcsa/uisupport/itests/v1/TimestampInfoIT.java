@@ -60,7 +60,6 @@ public class TimestampInfoIT {
   }
 
   @Test
-  @Disabled("TODO: DDT-1149")
   public void testGetTimestampWithQueryParamNegotiationCycle() {
     given()
         .contentType("application/json")
