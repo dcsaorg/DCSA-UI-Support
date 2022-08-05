@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.dcsa.jit.mapping.EnumMappers;
 import org.dcsa.jit.mapping.TransportCallMapper;
 import org.dcsa.jit.persistence.entity.TransportCall;
+import org.dcsa.jit.persistence.entity.Vessel;
 import org.dcsa.jit.persistence.entity.Voyage;
 import org.dcsa.jit.persistence.repository.FacilityRepository;
 import org.dcsa.jit.persistence.repository.LocationRepository;
@@ -14,12 +15,20 @@ import org.dcsa.jit.transferobjects.TransportCallTO;
 import org.dcsa.skernel.domain.persistence.entity.Facility;
 import org.dcsa.skernel.domain.persistence.entity.Location;
 import org.dcsa.skernel.errors.exceptions.ConcreteRequestErrorMessageException;
+import org.dcsa.skernel.infrastructure.pagination.Cursor;
+import org.dcsa.skernel.infrastructure.pagination.PagedResult;
 import org.dcsa.uisupport.mapping.TransportCallWithTimestampsMapper;
+import org.dcsa.uisupport.persistence.entity.TransportCallWithTimestamps;
 import org.dcsa.uisupport.persistence.repository.TransportCallWithTimestampsRepository;
 import org.dcsa.uisupport.transferobjects.TransportCallWithTimestampsTO;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -38,12 +47,15 @@ public class UiTransportCallService {
   private final FacilityRepository facilityRepository;
 
   @Transactional
-  public List<TransportCallWithTimestampsTO> findAll() {
-    return transportCallWithTimestampsRepository.findAll().stream()
-      .map(transportCallWithTimestampsMapper::toTO)
-      .toList();
-  }
+  public  PagedResult<TransportCallWithTimestampsTO> findAll(
+      String vesselIMONumber, String unLocationCode, String facilitySMDGCode, Cursor cursor) {
 
+    return new PagedResult<>(
+      transportCallWithTimestampsRepository
+        .findAll(fetchSpec(vesselIMONumber, unLocationCode, facilitySMDGCode),
+        cursor.toPageRequest()),
+      transportCallWithTimestampsMapper::toTO);
+  }
   @Transactional
   public TransportCallWithTimestampsTO create(TransportCallTO transportCallTO) {
 
@@ -111,5 +123,37 @@ public class UiTransportCallService {
     } else {
       return null;
     }
+  }
+
+  public static Specification<TransportCallWithTimestamps> fetchSpec(String vesselIMONumber, String unLocationCode, String facilitySMDGCode ) {
+    return (root, query, builder) -> {
+      Join<TransportCallWithTimestamps, Vessel> transportCallVesselJoin = root.join("vessel", JoinType.LEFT);
+      Join<TransportCallWithTimestamps, Location> transportCallLocationJoin = root.join("location", JoinType.LEFT);
+      Join<Location, Facility> locationFacilityJoin = transportCallLocationJoin.join("facility", JoinType.LEFT);
+      List<Predicate> predicates = new ArrayList<>();
+
+      if (null != vesselIMONumber) {
+        Predicate predicate =
+          builder.equal(transportCallVesselJoin.get("vesselIMONumber"), vesselIMONumber);
+        predicates.add(predicate);
+      }
+
+      if (null != unLocationCode) {
+        Predicate predicate =
+          builder.equal(transportCallLocationJoin.get("UNLocationCode"), unLocationCode);
+        predicates.add(predicate);
+      }
+
+      if (null != facilitySMDGCode) {
+        Predicate predicate;
+        if (facilitySMDGCode.equalsIgnoreCase("null")) {
+          predicate = builder.isNull(locationFacilityJoin.get("facilitySMDGCode"));
+        } else {
+          predicate = builder.equal(locationFacilityJoin.get("facilitySMDGCode"), facilitySMDGCode);
+        }
+        predicates.add(predicate);
+      }
+      return builder.and(predicates.toArray(Predicate[]::new));
+    };
   }
 }
