@@ -32,8 +32,6 @@ public record TimestampDefinitionTO(
 
   LocationRequirement eventLocationRequirement,
 
-  Boolean isAnchorageLocationNeeded,
-
   Boolean isTerminalNeeded,
 
   LocationRequirement vesselPositionRequirement,
