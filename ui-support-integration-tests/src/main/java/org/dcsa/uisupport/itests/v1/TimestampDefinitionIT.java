@@ -64,7 +64,7 @@ public class TimestampDefinitionIT {
                         new PublisherPatternTO("TWG2ATH", "TWG", "ATH"),
                         new PublisherPatternTO("ATH2TWG", "ATH", "TWG")
                     )
-            .build();
+            ).build();
 
     TimestampDefinitionTO actual =
         timestampDefinitions.stream().filter(td -> td.timestampTypeName().equals(timestampTypeName)).findFirst().get();
