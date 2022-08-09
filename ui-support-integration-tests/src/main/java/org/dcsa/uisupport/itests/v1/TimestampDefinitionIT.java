@@ -4,6 +4,7 @@ import io.restassured.http.ContentType;
 import org.dcsa.uisupport.itests.config.RestAssuredConfigurator;
 import org.dcsa.uisupport.transferobjects.PublisherPatternTO;
 import org.dcsa.uisupport.transferobjects.TimestampDefinitionTO;
+import org.dcsa.uisupport.transferobjects.enums.LocationRequirement;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -40,37 +41,33 @@ public class TimestampDefinitionIT {
 
     assertTrue(timestampDefinitions.stream().noneMatch(td -> td.id() == null));
 
+    final String timestampTypeName = "ATS-Towage (Outbound)";
+
     // Just test a single TimestampDefinition
     TimestampDefinitionTO expected =
         TimestampDefinitionTO.builder()
-            .id("TS197")
-            .timestampTypeName("ATS-Towage (Outbound)")
+            .id(timestampTypeName)
+            .timestampTypeName(timestampTypeName)
             .eventClassifierCode("ACT")
             .operationsEventTypeCode("STRT")
             .portCallPhaseTypeCode("OUTB")
             .portCallServiceTypeCode("TOWG")
             .portCallPart("Port Departure Execution")
-            .isBerthLocationNeeded(true)
-            .isPBPLocationNeeded(false)
-            .isAnchorageLocationNeeded(false)
-            .isTerminalNeeded(true)
-            .isVesselPositionNeeded(false)
+            .eventLocationRequirement(LocationRequirement.REQUIRED)
+            .isTerminalNeeded(false)
+            .isMilesToDestinationRelevant(false)
             .providedInStandard("jit1_1")
             .facilityTypeCode("BRTH")
-            .negotiationCycle("T-Towage-Outbound")
+            .negotiationCycle("T-Towage (Outbound)")
             .publisherPattern(
-                Stream.of(
-                        new PublisherPatternTO("CA2TWG", "CA", "TWG"),
-                        new PublisherPatternTO("TWG2CA", "TWG", "CA"),
-                        new PublisherPatternTO("VSL2TWG", "VSL", "TWG"),
-                        new PublisherPatternTO("AG2TWG", "AG", "TWG"),
-                        new PublisherPatternTO("TWG2VSL", "TWG", "VSL"),
-                        new PublisherPatternTO("TWG2AG", "TWG", "AG"))
-                    .collect(Collectors.toCollection(HashSet::new)))
+                Set.of(
+                        new PublisherPatternTO("TWG2ATH", "TWG", "ATH"),
+                        new PublisherPatternTO("ATH2TWG", "ATH", "TWG")
+                    )
             .build();
 
     TimestampDefinitionTO actual =
-        timestampDefinitions.stream().filter(td -> td.id().equals("TS197")).findFirst().get();
+        timestampDefinitions.stream().filter(td -> td.timestampTypeName().equals(timestampTypeName)).findFirst().get();
     assertEquals(expected, actual);
     assertEquals(expected, actual);
   }

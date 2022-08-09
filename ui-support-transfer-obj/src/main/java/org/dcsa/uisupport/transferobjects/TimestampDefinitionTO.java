@@ -1,6 +1,9 @@
 package org.dcsa.uisupport.transferobjects;
 
 import lombok.Builder;
+import org.dcsa.uisupport.transferobjects.enums.LocationRequirement;
+
+import javax.persistence.Column;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
@@ -27,16 +30,17 @@ public record TimestampDefinitionTO(
   @Size(max = 100)
   String portCallPart,
 
-  Boolean isBerthLocationNeeded,
-
-  Boolean isPBPLocationNeeded,
+  LocationRequirement eventLocationRequirement,
 
   Boolean isAnchorageLocationNeeded,
 
   Boolean isTerminalNeeded,
 
-  Boolean isVesselPositionNeeded,
+  LocationRequirement vesselPositionRequirement,
+
   String negotiationCycle,
+
+  Boolean isMilesToDestinationRelevant,
 
   String providedInStandard,
 
