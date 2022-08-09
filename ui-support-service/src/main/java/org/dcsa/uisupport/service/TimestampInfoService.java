@@ -2,13 +2,13 @@ package org.dcsa.uisupport.service;
 
 import lombok.RequiredArgsConstructor;
 import org.dcsa.jit.mapping.OperationsEventMapper;
-import org.dcsa.jit.persistence.entity.*;
-import org.dcsa.jit.persistence.repository.OpsEventTimestampDefinitionRepository;
-import org.dcsa.jit.persistence.repository.UnmappedEventRepository;
+import org.dcsa.jit.persistence.entity.OperationsEvent;
+import org.dcsa.jit.persistence.entity.TimestampDefinition;
+import org.dcsa.jit.persistence.entity.TimestampInfo;
+import org.dcsa.jit.persistence.entity.TransportCall;
+import org.dcsa.jit.persistence.repository.TimestampInfoRepository;
 import org.dcsa.jit.transferobjects.OperationsEventTO;
 import org.dcsa.uisupport.mapping.TimestampDefinitionMapper;
-import org.dcsa.uisupport.persistence.entity.PendingEvent;
-import org.dcsa.uisupport.persistence.repository.PendingEventRepository;
 import org.dcsa.uisupport.transferobjects.TimestampDefinitionTO;
 import org.dcsa.uisupport.transferobjects.TimestampInfoTO;
 import org.dcsa.uisupport.transferobjects.enums.EventDeliveryStatus;
@@ -19,32 +19,28 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class TimestampInfoService {
-  private final UnmappedEventRepository unmappedEventRepository;
-  private final PendingEventRepository pendingEventRepository;
-  private final OpsEventTimestampDefinitionRepository opsEventTimestampDefinitionRepository;
+  private final TimestampInfoRepository timestampInfoRepository;
   private final TimestampDefinitionMapper timestampDefinitionMapper;
   private final OperationsEventMapper operationsEventMapper;
   public List<TimestampInfoTO> findAll(String transportCallID, String negotiationCycle, String portCallPart) {
 
-    return opsEventTimestampDefinitionRepository
+    return timestampInfoRepository
         .findAll(fetchSpec(transportCallID, negotiationCycle, portCallPart))
         .stream()
         .map(
             opsEventTimestampDefinition -> {
-              Optional<UnmappedEvent> unmapped = unmappedEventRepository.findById(opsEventTimestampDefinition.getEventID());
-              Optional<PendingEvent> pending = pendingEventRepository.findById(opsEventTimestampDefinition.getEventID());
-
               EventDeliveryStatus eventDeliveryStatus;
-              if (pending.isPresent()) {
+              if (opsEventTimestampDefinition.getPendingEvents() != null && !opsEventTimestampDefinition.getPendingEvents().isEmpty()) {
+                boolean deliveryAttempted = opsEventTimestampDefinition.getPendingEvents().stream()
+                  .anyMatch(e -> e.getLastAttemptDateTime() != null);
+                eventDeliveryStatus =  deliveryAttempted ? EventDeliveryStatus.ATTEMPTED_DELIVERY : EventDeliveryStatus.PENDING_DELIVERY;
+              } else if (opsEventTimestampDefinition.getUnmappedEvent() != null) {
                 eventDeliveryStatus = EventDeliveryStatus.PENDING_DELIVERY;
-              } else if (unmapped.isPresent()) {
-                eventDeliveryStatus = EventDeliveryStatus.ATTEMPTED_DELIVERY;
               } else {
                 eventDeliveryStatus = EventDeliveryStatus.DELIVERY_FINISHED;
               }
@@ -56,14 +52,12 @@ public class TimestampInfoService {
         .toList();
   }
 
-  private static Specification<OpsEventTimestampDefinition> fetchSpec(
+  private static Specification<TimestampInfo> fetchSpec(
     String transportCallID, String negotiationCycle, String portCallPart) {
     return (root, query, builder) -> {
-      // Eager load *all the entities* -
-      // being a "dump every timestamp" query the laziness hurts a lot.
-      Join<OpsEventTimestampDefinition, OperationsEvent> opsEventJoin = root.join("operationsEvent");
+      Join<TimestampInfo, OperationsEvent> opsEventJoin = root.join("operationsEvent");
       Join<OperationsEvent, TransportCall> operationsEventTransportCallJoin = opsEventJoin.join("transportCall");
-      Join<OpsEventTimestampDefinition, TimestampDefinition> timestampDefinitionJoin = root.join("timestampDefinition");
+      Join<TimestampInfo, TimestampDefinition> timestampDefinitionJoin = root.join("timestampDefinition");
 
       List<Predicate> predicates = new ArrayList<>();
 
