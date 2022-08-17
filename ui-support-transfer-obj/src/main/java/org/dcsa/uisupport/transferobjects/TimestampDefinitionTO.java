@@ -36,7 +36,7 @@ public record TimestampDefinitionTO(
 
   LocationRequirement vesselPositionRequirement,
 
-  String negotiationCycle,
+  NegotiationCycleTO negotiationCycle,
 
   Boolean isMilesToDestinationRelevant,
 

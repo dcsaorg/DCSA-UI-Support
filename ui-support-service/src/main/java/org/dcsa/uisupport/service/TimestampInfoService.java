@@ -2,10 +2,7 @@ package org.dcsa.uisupport.service;
 
 import lombok.RequiredArgsConstructor;
 import org.dcsa.jit.mapping.OperationsEventMapper;
-import org.dcsa.jit.persistence.entity.OperationsEvent;
-import org.dcsa.jit.persistence.entity.TimestampDefinition;
-import org.dcsa.jit.persistence.entity.TimestampInfo;
-import org.dcsa.jit.persistence.entity.TransportCall;
+import org.dcsa.jit.persistence.entity.*;
 import org.dcsa.jit.persistence.repository.TimestampInfoRepository;
 import org.dcsa.jit.transferobjects.OperationsEventTO;
 import org.dcsa.uisupport.mapping.TimestampDefinitionMapper;
@@ -67,7 +64,8 @@ public class TimestampInfoService {
       }
 
       if (null != negotiationCycle) {
-        Predicate predicate = builder.equal(timestampDefinitionJoin.get("negotiationCycle"), negotiationCycle);
+        Join<TimestampDefinition, NegotiationCycle> negotiationCycleJoin = timestampDefinitionJoin.join(TimestampDefinition_.NEGOTIATION_CYCLE);
+        Predicate predicate = builder.equal(negotiationCycleJoin.get(NegotiationCycle_.CYCLE_KEY), negotiationCycle);
         predicates.add(predicate);
       }
 

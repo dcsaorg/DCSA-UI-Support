@@ -4,7 +4,7 @@ import org.dcsa.jit.persistence.entity.TimestampDefinition;
 import org.dcsa.uisupport.transferobjects.TimestampDefinitionTO;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = NegotiationCycleMapper.class)
 public interface TimestampDefinitionMapper {
   TimestampDefinitionTO toTO(TimestampDefinition timestampDefinition);
 }
