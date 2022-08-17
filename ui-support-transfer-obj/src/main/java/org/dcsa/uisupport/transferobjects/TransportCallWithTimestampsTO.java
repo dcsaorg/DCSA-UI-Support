@@ -1,6 +1,5 @@
 package org.dcsa.uisupport.transferobjects;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,16 +21,12 @@ public class TransportCallWithTimestampsTO {
   @JsonUnwrapped
   private TransportCallTO transportCallTO;
 
-  @JsonProperty("transportCallID")
   private UUID transportCallID;
 
-  @JsonProperty("latestEventCreatedDateTime")
   private OffsetDateTime latestEventCreatedDateTime;
 
-  @JsonProperty("etaBerthDateTime")
   private OffsetDateTime etaBerthDateTime;
 
-  @JsonProperty("atdBerthDateTime")
   private OffsetDateTime atdBerthDateTime;
 
   private Float vesselDraft;
