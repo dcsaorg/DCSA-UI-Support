@@ -2,6 +2,7 @@ package org.dcsa.uisupport.itests.v1;
 
 import io.restassured.http.ContentType;
 import org.dcsa.uisupport.itests.config.RestAssuredConfigurator;
+import org.dcsa.uisupport.transferobjects.NegotiationCycleTO;
 import org.dcsa.uisupport.transferobjects.PublisherPatternTO;
 import org.dcsa.uisupport.transferobjects.TimestampDefinitionTO;
 import org.dcsa.uisupport.transferobjects.enums.LocationRequirement;
@@ -59,7 +60,7 @@ public class TimestampDefinitionIT {
             .isMilesToDestinationRelevant(false)
             .providedInStandard("jit1_1")
             .facilityTypeCode("BRTH")
-            .negotiationCycle("T-Towage (Outbound)")
+            .negotiationCycle(new NegotiationCycleTO("T-Towage (Outbound)", "Towage (Outbound)"))
             .publisherPattern(
                 Set.of(
                         new PublisherPatternTO("TWG2ATH", "TWG", "ATH"),
