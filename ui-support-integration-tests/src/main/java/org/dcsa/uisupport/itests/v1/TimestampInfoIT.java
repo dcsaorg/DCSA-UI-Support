@@ -40,26 +40,6 @@ public class TimestampInfoIT {
   }
 
   @Test
-  public void testGetTimestampWithQueryParamTransportCallID() {
-    given()
-        .contentType("application/json")
-        .queryParam("transportCallID", "b785317a-2340-4db7-8fb3-c8dfb1edfa60")
-        .get("/v1/unofficial/timestamp-info")
-        .then()
-        .assertThat()
-        .statusCode(200)
-        .contentType(ContentType.JSON)
-        .body("size()", greaterThanOrEqualTo(1))
-        .body(
-            "operationsEventTO.transportCall.transportCallReference",
-            everyItem(equalTo("TC-REF-08_03-B")))
-        .extract()
-        .body()
-        .jsonPath()
-        .getList(".", TimestampInfoTO.class);
-  }
-
-  @Test
   public void testGetTimestampWithQueryParamNegotiationCycle() {
     given()
         .contentType("application/json")

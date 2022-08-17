@@ -24,10 +24,10 @@ public class TimestampInfoService {
   private final TimestampInfoRepository timestampInfoRepository;
   private final TimestampDefinitionMapper timestampDefinitionMapper;
   private final OperationsEventMapper operationsEventMapper;
-  public List<TimestampInfoTO> findAll(String transportCallID, String negotiationCycle, String portCallPart) {
+  public List<TimestampInfoTO> findAll(String portVisitID, String negotiationCycle, String portCallPart) {
 
     return timestampInfoRepository
-        .findAll(fetchSpec(transportCallID, negotiationCycle, portCallPart))
+        .findAll(fetchSpec(portVisitID, negotiationCycle, portCallPart))
         .stream()
         .map(
             opsEventTimestampDefinition -> {
@@ -50,16 +50,18 @@ public class TimestampInfoService {
   }
 
   private static Specification<TimestampInfo> fetchSpec(
-    String transportCallID, String negotiationCycle, String portCallPart) {
+    String portVisitID, String negotiationCycle, String portCallPart) {
     return (root, query, builder) -> {
-      Join<TimestampInfo, OperationsEvent> opsEventJoin = root.join("operationsEvent");
-      Join<OperationsEvent, TransportCall> operationsEventTransportCallJoin = opsEventJoin.join("transportCall");
-      Join<TimestampInfo, TimestampDefinition> timestampDefinitionJoin = root.join("timestampDefinition");
+      Join<TimestampInfo, OperationsEvent> operationsEventJoin = root.join(TimestampInfo_.OPERATIONS_EVENT);
+      Join<TimestampInfo, TimestampDefinition> timestampDefinitionJoin = root.join(TimestampInfo_.TIMESTAMP_DEFINITION);
 
       List<Predicate> predicates = new ArrayList<>();
 
-      if (null != transportCallID) {
-        Predicate predicate = builder.equal(operationsEventTransportCallJoin.get("id"), UUID.fromString(transportCallID));
+      if (null != portVisitID) {
+        Join<OperationsEvent, TransportCall> portVisitJoin = operationsEventJoin
+          .join(OperationsEvent_.TRANSPORT_CALL)
+          .join(TransportCall_.PORT_VISIT);
+        Predicate predicate = builder.equal(portVisitJoin.get("id"), UUID.fromString(portVisitID));
         predicates.add(predicate);
       }
 
@@ -73,6 +75,8 @@ public class TimestampInfoService {
         Predicate predicate = builder.equal(timestampDefinitionJoin.get("portCallPart"), portCallPart);
         predicates.add(predicate);
       }
+
+      query.orderBy(builder.desc(operationsEventJoin.get("eventCreatedDateTime")));
 
       return builder.and(predicates.toArray(Predicate[]::new));
     };
