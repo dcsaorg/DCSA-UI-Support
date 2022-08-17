@@ -7,15 +7,15 @@ import org.dcsa.jit.persistence.entity.TransportCall;
 import org.dcsa.jit.persistence.entity.Voyage;
 import org.dcsa.jit.persistence.repository.FacilityRepository;
 import org.dcsa.jit.persistence.repository.LocationRepository;
-import org.dcsa.jit.persistence.repository.TransportCallRepository;
 import org.dcsa.jit.service.ServiceService;
+import org.dcsa.jit.service.TransportCallService;
 import org.dcsa.jit.service.VesselService;
 import org.dcsa.jit.transferobjects.TransportCallTO;
 import org.dcsa.skernel.domain.persistence.entity.Facility;
 import org.dcsa.skernel.domain.persistence.entity.Location;
 import org.dcsa.skernel.errors.exceptions.ConcreteRequestErrorMessageException;
 import org.dcsa.uisupport.mapping.TransportCallWithTimestampsMapper;
-import org.dcsa.uisupport.persistence.repository.TransportCallWithTimestampsRepository;
+import org.dcsa.uisupport.persistence.repository.JITPortVisitUIContextRepository;
 import org.dcsa.uisupport.transferobjects.TransportCallWithTimestampsTO;
 import org.springframework.stereotype.Service;
 
@@ -27,19 +27,23 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class UiTransportCallService {
-  private final TransportCallWithTimestampsRepository transportCallWithTimestampsRepository;
-  private final TransportCallWithTimestampsMapper transportCallWithTimestampsMapper;
   private final TransportCallMapper transportCallMapper;
+  private final TransportCallWithTimestampsMapper transportCallWithTimestampsMapper;
   private final EnumMappers enumMappers;
   private final ServiceService serviceService;
   private final VesselService vesselService;
-  private final TransportCallRepository transportCallRepository;
+  private final TransportCallService transportCallService;
   private final LocationRepository locationRepository;
   private final FacilityRepository facilityRepository;
+  private final JITPortVisitUIContextRepository jitPortVisitUIContextRepository;
 
   @Transactional
   public List<TransportCallWithTimestampsTO> findAll() {
-    return transportCallWithTimestampsRepository.findAll().stream()
+    // This is a bit messy - the UI really wants a port visit, but there is no well-defined
+    // Entity for it.  We approximate it with one variant of the transport call to reduce
+    // the amount of changes required for the UI (short term win, for long term pain).
+    // But at least "It works(tm)!" ...
+    return jitPortVisitUIContextRepository.findAll().stream()
       .map(transportCallWithTimestampsMapper::toTO)
       .toList();
   }
@@ -89,7 +93,7 @@ public class UiTransportCallService {
       .portCallStatusCode(null)
       .build();
 
-    TransportCall saved = transportCallRepository.save(entityToSave);
+    TransportCall saved = transportCallService.create(entityToSave);
 
     return TransportCallWithTimestampsTO.builder()
       .transportCallID(saved.getId()) // Just adding the id for easier testing

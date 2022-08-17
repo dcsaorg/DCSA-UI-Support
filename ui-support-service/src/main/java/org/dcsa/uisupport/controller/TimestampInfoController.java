@@ -19,9 +19,9 @@ public class TimestampInfoController {
 
   @GetMapping
   public List<TimestampInfoTO> getTimestampInfos(
-      @RequestParam(value = "transportCallID", required = false) String transportCallID,
+      @RequestParam(value = "portVisitID", required = false) String portVisitID,
       @RequestParam(value = "negotiationCycle", required = false) String negotiationCycle,
       @RequestParam(value = "portCallPart", required = false) String portCallPart) {
-    return timestampInfoService.findAll(transportCallID, negotiationCycle, portCallPart);
+    return timestampInfoService.findAll(portVisitID, negotiationCycle, portCallPart);
   }
 }

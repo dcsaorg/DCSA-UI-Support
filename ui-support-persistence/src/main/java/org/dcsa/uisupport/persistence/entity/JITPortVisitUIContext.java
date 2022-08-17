@@ -1,26 +1,25 @@
 package org.dcsa.uisupport.persistence.entity;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.dcsa.jit.persistence.entity.TransportCall;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @Data
-@Builder(builderMethodName = "withTimestampsBuilder")
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter(AccessLevel.PRIVATE)
 @Entity
-@Table(name = "transport_call_with_timestamps")
-public class TransportCallWithTimestamps extends TransportCall {
+@Table(name = "jit_port_visit_ui_context")
+public class JITPortVisitUIContext {
+
+  @Id
+  @Column(name = "port_visit_id")
+  private UUID portVisitID;
+
   @Column(name = "latest_event_created_date_time")
   private OffsetDateTime latestEventCreatedDateTime;
 
@@ -35,4 +34,9 @@ public class TransportCallWithTimestamps extends TransportCall {
 
   @Column(name = "miles_remaining_to_destination")
   private Float milesRemainingToDestination;
+
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "port_visit_id")
+  @MapsId
+  private TransportCall jitPortVisit;
 }
