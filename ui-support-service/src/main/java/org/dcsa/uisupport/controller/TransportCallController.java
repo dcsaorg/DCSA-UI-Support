@@ -17,8 +17,11 @@ public class TransportCallController {
   private final UiTransportCallService uiTransportCallService;
 
   @GetMapping
-  public List<TransportCallWithTimestampsTO> findAll() {
-    return uiTransportCallService.findAll();
+  public List<TransportCallWithTimestampsTO> findAll(
+    @RequestParam(value = "UNLocationCode", required = false) String unLocationCode,
+    @RequestParam(value = "vesselIMONumber", required = false) String vesselIMONumber
+  ) {
+    return uiTransportCallService.findAll(unLocationCode, vesselIMONumber);
   }
 
   @PostMapping

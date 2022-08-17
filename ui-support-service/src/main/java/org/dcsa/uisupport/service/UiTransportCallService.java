@@ -3,8 +3,7 @@ package org.dcsa.uisupport.service;
 import lombok.RequiredArgsConstructor;
 import org.dcsa.jit.mapping.EnumMappers;
 import org.dcsa.jit.mapping.TransportCallMapper;
-import org.dcsa.jit.persistence.entity.TransportCall;
-import org.dcsa.jit.persistence.entity.Voyage;
+import org.dcsa.jit.persistence.entity.*;
 import org.dcsa.jit.persistence.repository.FacilityRepository;
 import org.dcsa.jit.persistence.repository.LocationRepository;
 import org.dcsa.jit.service.ServiceService;
@@ -12,14 +11,23 @@ import org.dcsa.jit.service.TransportCallService;
 import org.dcsa.jit.service.VesselService;
 import org.dcsa.jit.transferobjects.TransportCallTO;
 import org.dcsa.skernel.domain.persistence.entity.Facility;
+import org.dcsa.skernel.domain.persistence.entity.Facility_;
 import org.dcsa.skernel.domain.persistence.entity.Location;
+import org.dcsa.skernel.domain.persistence.entity.Location_;
 import org.dcsa.skernel.errors.exceptions.ConcreteRequestErrorMessageException;
 import org.dcsa.uisupport.mapping.TransportCallWithTimestampsMapper;
+import org.dcsa.uisupport.persistence.entity.JITPortVisitUIContext;
+import org.dcsa.uisupport.persistence.entity.JITPortVisitUIContext_;
 import org.dcsa.uisupport.persistence.repository.JITPortVisitUIContextRepository;
 import org.dcsa.uisupport.transferobjects.TransportCallWithTimestampsTO;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -38,12 +46,12 @@ public class UiTransportCallService {
   private final JITPortVisitUIContextRepository jitPortVisitUIContextRepository;
 
   @Transactional
-  public List<TransportCallWithTimestampsTO> findAll() {
+  public List<TransportCallWithTimestampsTO> findAll(String unLocationCode, String vesselIMONumber) {
     // This is a bit messy - the UI really wants a port visit, but there is no well-defined
     // Entity for it.  We approximate it with one variant of the transport call to reduce
     // the amount of changes required for the UI (short term win, for long term pain).
     // But at least "It works(tm)!" ...
-    return jitPortVisitUIContextRepository.findAll().stream()
+    return jitPortVisitUIContextRepository.findAll(fetchSpec(unLocationCode, vesselIMONumber)).stream()
       .map(transportCallWithTimestampsMapper::toTO)
       .toList();
   }
@@ -115,5 +123,28 @@ public class UiTransportCallService {
     } else {
       return null;
     }
+  }
+
+  private static Specification<JITPortVisitUIContext> fetchSpec(String unLocationCode, String vesselIMONumber) {
+    return (root, query, builder) -> {
+      List<Predicate> predicates = new ArrayList<>();
+      Join<JITPortVisitUIContext, TransportCall> portVisitJoin = root.join(JITPortVisitUIContext_.JIT_PORT_VISIT);
+
+      if (null != unLocationCode) {
+        Join<TransportCall, Location> locationJoin = portVisitJoin.join(TransportCall_.LOCATION);
+        Predicate predicate = builder.equal(locationJoin.get(Location_.U_NLOCATION_CODE), unLocationCode);
+        predicates.add(predicate);
+      }
+
+      if (null != vesselIMONumber) {
+        Join<TransportCall, Vessel> vesselJoin = portVisitJoin.join(TransportCall_.VESSEL);
+        Predicate predicate = builder.equal(vesselJoin.get(Vessel_.VESSEL_IM_ONUMBER), vesselIMONumber);
+        predicates.add(predicate);
+      }
+
+      query.orderBy(builder.desc(root.get(JITPortVisitUIContext_.LATEST_EVENT_CREATED_DATE_TIME)));
+
+      return builder.and(predicates.toArray(Predicate[]::new));
+    };
   }
 }
