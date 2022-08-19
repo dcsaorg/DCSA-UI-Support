@@ -1,0 +1,98 @@
+[
+  {
+    "transportCallID": "56f71a88-daff-4ceb-82a2-2b97beac19dc",
+    "transportCallSequenceNumber": 1,
+    "facilityTypeCode": "POTE",
+    "otherFacility": null,
+    "facilityCode": null,
+    "facilityCodeListProvider": null,
+    "vessel": {
+      "id": "6b7ee6ce-dcf4-4c01-966a-1c500552bb7a",
+      "vesselIMONumber": "9372872",
+      "vesselName": "MV BURGUNDY",
+      "vesselFlag": null,
+      "vesselCallSignNumber": null,
+      "vesselOperatorCarrierCode": "CMA",
+      "vesselOperatorCarrierCodeListProvider": "SMDG"
+    },
+    "location": {
+      "locationName": null,
+      "latitude": null,
+      "longitude": null,
+      "address": null,
+      "facilityCode": null,
+      "facilityCodeListProvider": null,
+      "UNLocationCode": "DEHAM"
+    },
+    "modeOfTransport": "VESSEL",
+    "carrierServiceCode": "FEMEX",
+    "carrierVoyageNumber": "0HFASS1MA",
+    "exportVoyageNumber": "0HFASS1MA",
+    "importVoyageNumber": "0HFASS1MA",
+    "UNLocationCode": "DEHAM"
+  },
+  {
+    "transportCallID": "84af6b22-69c5-49f4-8a3d-efe338319e6d",
+    "transportCallSequenceNumber": 1,
+    "facilityTypeCode": "POTE",
+    "otherFacility": null,
+    "facilityCode": null,
+    "facilityCodeListProvider": null,
+    "vessel": {
+      "id": "6b7ee6ce-dcf4-4c01-966a-1c500552bb7a",
+      "vesselIMONumber": "9372872",
+      "vesselName": "MV BURGUNDY",
+      "vesselFlag": null,
+      "vesselCallSignNumber": null,
+      "vesselOperatorCarrierCode": "CMA",
+      "vesselOperatorCarrierCodeListProvider": "SMDG"
+    },
+    "location": {
+      "locationName": null,
+      "latitude": null,
+      "longitude": null,
+      "address": null,
+      "facilityCode": null,
+      "facilityCodeListProvider": null,
+      "UNLocationCode": "DEHAM"
+    },
+    "modeOfTransport": "VESSEL",
+    "carrierServiceCode": "FEMEX",
+    "carrierVoyageNumber": "0HFASS1MA",
+    "exportVoyageNumber": "0HFASS1MA",
+    "importVoyageNumber": "0HFASS1MA",
+    "UNLocationCode": "DEHAM"
+  },
+  {
+    "transportCallID": "adcb3b35-e538-46ac-8d91-8f89899bd75f",
+    "transportCallSequenceNumber": 1,
+    "facilityTypeCode": "POTE",
+    "otherFacility": null,
+    "facilityCode": null,
+    "facilityCodeListProvider": null,
+    "vessel": {
+      "id": "6b7ee6ce-dcf4-4c01-966a-1c500552bb7a",
+      "vesselIMONumber": "9372872",
+      "vesselName": "MV BURGUNDY",
+      "vesselFlag": null,
+      "vesselCallSignNumber": null,
+      "vesselOperatorCarrierCode": "CMA",
+      "vesselOperatorCarrierCodeListProvider": "SMDG"
+    },
+    "location": {
+      "locationName": null,
+      "latitude": null,
+      "longitude": null,
+      "address": null,
+      "facilityCode": null,
+      "facilityCodeListProvider": null,
+      "UNLocationCode": "DEHAM"
+    },
+    "modeOfTransport": "VESSEL",
+    "carrierServiceCode": "FEMEX",
+    "carrierVoyageNumber": "0HFALN1MA",
+    "exportVoyageNumber": "0HFALN1MA",
+    "importVoyageNumber": "0HFALN1MA",
+    "UNLocationCode": "DEHAM"
+  }
+]

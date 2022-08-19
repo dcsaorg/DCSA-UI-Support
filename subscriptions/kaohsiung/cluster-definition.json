@@ -1,0 +1,31 @@
+{
+  "name": "kaohsiung",
+  "environments": [
+    "development",
+    "production"
+  ],
+  "applications": {
+    "ui-support": "https://{{participant}}.p6-{{name}}-{{environment}}.dcsa.org/ui-support/v1",
+    "jit": "https://{{participant}}.p6-{{name}}-{{environment}}.dcsa.org/jit/v1",
+    "jit-notifications": "https://{{participant}}.p6-{{name}}-{{environment}}.dcsa.org/jit-notifications/v1"
+  },
+  "participants": {
+    "evergreenmarine": {
+      "role": "CA",
+      "smdg": "EMC"
+    },
+    "yangming": {
+      "role": "CA",
+      "smdg": "YML"
+    },
+    "twport": {
+      "role": "ATH"
+    },
+    "kmct": {
+      "role": "TR"
+    },
+    "dcsa": {
+      "role": "DCSA"
+    }
+  }
+}
