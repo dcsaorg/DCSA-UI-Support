@@ -29,6 +29,8 @@ public class TransportCallWithTimestampsTO {
 
   private OffsetDateTime atdBerthDateTime;
 
+  private OffsetDateTime omitCreatedDateTime;
+
   private Float vesselDraft;
   private Float milesToDestinationPort;
 }
