@@ -29,6 +29,9 @@ public class JITPortVisitUIContext {
   @Column(name = "atd_berth_date_time")
   private OffsetDateTime atdBerthDateTime;
 
+  @Column(name = "omit_created_date_time")
+  private OffsetDateTime omitCreatedDateTime;
+
   @Column(name = "vessel_draft")
   private Float vesselDraft;
 

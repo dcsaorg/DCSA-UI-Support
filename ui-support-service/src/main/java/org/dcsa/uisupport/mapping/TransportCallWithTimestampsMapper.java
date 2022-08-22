@@ -17,6 +17,7 @@ public class TransportCallWithTimestampsMapper {
       .transportCallTO(transportCallMapper.toTO(src.getJitPortVisit()))
       .atdBerthDateTime(src.getAtdBerthDateTime())
       .etaBerthDateTime(src.getEtaBerthDateTime())
+      .omitCreatedDateTime(src.getOmitCreatedDateTime())
       .latestEventCreatedDateTime(src.getLatestEventCreatedDateTime())
       .vesselDraft(src.getVesselDraft())
       .milesToDestinationPort(src.getMilesRemainingToDestination())
