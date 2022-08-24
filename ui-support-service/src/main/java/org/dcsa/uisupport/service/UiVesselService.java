@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import org.dcsa.jit.mapping.VesselMapper;
 import org.dcsa.jit.persistence.entity.Vessel;
 import org.dcsa.jit.persistence.repository.VesselRepository;
-import org.dcsa.jit.transferobjects.VesselTO;
+import org.dcsa.jit.transferobjects.TransportCallVesselTO;
+import org.dcsa.jit.transferobjects.UISupportVesselTO;
 import org.dcsa.jit.transferobjects.enums.CarrierCodeListProvider;
 import org.dcsa.skernel.domain.persistence.entity.Carrier;
 import org.dcsa.skernel.errors.exceptions.ConcreteRequestErrorMessageException;
@@ -25,22 +26,22 @@ public class UiVesselService {
   private final CarrierRepository carrierRepository;
   private final VesselMapper vesselMapper;
 
-  public PagedResult<VesselTO> findAll(Cursor cursor) {
+  public PagedResult<TransportCallVesselTO> findAllRealVessels(Cursor cursor) {
     return new PagedResult<>(
-      vesselRepository.findAll(cursor.toPageRequest()),
+      vesselRepository.findAllByIsDummyIsFalse(cursor.toPageRequest()),
       vesselMapper::toTO
     );
   }
 
-  public VesselTO fetchVesselByIMONumber(final String vesselIMONumber) {
+  public UISupportVesselTO fetchVesselByIMONumber(final String vesselIMONumber) {
     Optional<Vessel> foundVessel = vesselRepository.findByVesselIMONumber(vesselIMONumber);
-    return vesselMapper.toTO(
+    return vesselMapper.toUISupportVesselTO(
         foundVessel.orElseThrow(
             () -> ConcreteRequestErrorMessageException.notFound("Vessel not found.")));
   }
 
   @Transactional
-  public VesselTO createVessel(final VesselTO request) {
+  public UISupportVesselTO createVessel(final UISupportVesselTO request) {
 
     Carrier carrierForRequestedVessel = findCarrierForVesselRequest(request);
 
@@ -54,7 +55,7 @@ public class UiVesselService {
     return setCarrierDetailsOnVesselTOIfPresent(request, carrierForRequestedVessel, saveVessel);
   }
 
-  private Carrier findCarrierForVesselRequest(final VesselTO request) {
+  private Carrier findCarrierForVesselRequest(final UISupportVesselTO request) {
     Carrier carrier = null;
     if (null != request.vesselOperatorCarrierCode()) {
       // if vessel operator carrier code is present , we need carrier code list provider
@@ -78,26 +79,26 @@ public class UiVesselService {
     return carrier;
   }
 
-  private VesselTO setCarrierDetailsOnVesselTOIfPresent(
-      VesselTO request, Carrier carrierForVesselRequest, Vessel vessel) {
+  private UISupportVesselTO setCarrierDetailsOnVesselTOIfPresent(
+    UISupportVesselTO request, Carrier carrierForVesselRequest, Vessel vessel) {
     if (null != carrierForVesselRequest) {
       if (CarrierCodeListProvider.SMDG.equals(request.vesselOperatorCarrierCodeListProvider())) {
-        return vesselMapper.toTO(vessel).toBuilder()
+        return vesselMapper.toUISupportVesselTO(vessel).toBuilder()
             .vesselOperatorCarrierCode(carrierForVesselRequest.getSmdgCode())
             .vesselOperatorCarrierCodeListProvider(CarrierCodeListProvider.SMDG)
             .build();
       } else
-        return vesselMapper.toTO(vessel).toBuilder()
+        return vesselMapper.toUISupportVesselTO(vessel).toBuilder()
             .vesselOperatorCarrierCode(carrierForVesselRequest.getNmftaCode())
             .vesselOperatorCarrierCodeListProvider(CarrierCodeListProvider.NMFTA)
             .build();
     } else {
-      return vesselMapper.toTO(vessel);
+      return vesselMapper.toUISupportVesselTO(vessel);
     }
   }
 
   @Transactional
-  public VesselTO updateVessel(final String vesselIMONumber, final VesselTO request) {
+  public UISupportVesselTO updateVessel(final String vesselIMONumber, final UISupportVesselTO request) {
 
     Optional<Vessel> foundVessel = vesselRepository.findByVesselIMONumber(vesselIMONumber);
     UUID id =

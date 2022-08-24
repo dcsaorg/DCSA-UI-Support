@@ -3,7 +3,7 @@ package org.dcsa.uisupport.itests.v1;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.dcsa.jit.transferobjects.TransportCallTO;
-import org.dcsa.jit.transferobjects.VesselTO;
+import org.dcsa.jit.transferobjects.TransportCallVesselTO;
 import org.dcsa.jit.transferobjects.enums.FacilityCodeListProvider;
 import org.dcsa.jit.transferobjects.enums.ModeOfTransport;
 import org.dcsa.uisupport.itests.config.RestAssuredConfigurator;
@@ -11,8 +11,6 @@ import org.dcsa.uisupport.transferobjects.TransportCallWithTimestampsTO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
@@ -106,7 +104,7 @@ public class TransportCallControllerIT {
         .UNLocationCode(unLocationCode)
         .facilityCode(facilityCode)
         .facilityCodeListProvider(facilityCode != null ? FacilityCodeListProvider.SMDG : null)
-        .vessel(VesselTO.builder().vesselIMONumber(vesselIMONumber).build())
+        .vessel(TransportCallVesselTO.builder().vesselIMONumber(vesselIMONumber).build())
         .build();
 
     return given()

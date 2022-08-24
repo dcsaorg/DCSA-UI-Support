@@ -41,7 +41,7 @@ public class TimestampExportController {
         .collect(Collectors.joining(",")))
     .column("Publisher Role", TimestampExportTO::operationsEvent, OperationsEventTO::publisherRole)
     .column("Publisher Name", TimestampExportTO::operationsEvent, OperationsEventTO::publisher, PartyTO::partyName)
-    .column("Vessel Name", TimestampExportTO::operationsEvent, OperationsEventTO::transportCall, TransportCallTO::vessel, VesselTO::vesselName)
+    .column("Vessel Name", TimestampExportTO::operationsEvent, OperationsEventTO::transportCall, TransportCallTO::vessel, TransportCallVesselTO::vesselName)
     .column("Vessel IMO", TimestampExportTO::operationsEvent, OperationsEventTO::transportCall, TransportCallTO::vessel, v -> Integer.parseInt(v.vesselIMONumber()))
     .column("Vessel location lat", TimestampExportTO::operationsEvent, OperationsEventTO::vesselPosition, LocationTO::latitude)
     .column("Vessel location long", TimestampExportTO::operationsEvent, OperationsEventTO::vesselPosition, LocationTO::longitude)
