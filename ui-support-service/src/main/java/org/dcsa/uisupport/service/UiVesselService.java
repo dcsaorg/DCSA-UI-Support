@@ -11,7 +11,7 @@ import org.dcsa.skernel.domain.persistence.entity.Carrier;
 import org.dcsa.skernel.errors.exceptions.ConcreteRequestErrorMessageException;
 import org.dcsa.skernel.infrastructure.pagination.Cursor;
 import org.dcsa.skernel.infrastructure.pagination.PagedResult;
-import org.dcsa.uisupport.persistence.repository.CarrierRepository;
+import org.dcsa.jit.persistence.repository.CarrierRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
