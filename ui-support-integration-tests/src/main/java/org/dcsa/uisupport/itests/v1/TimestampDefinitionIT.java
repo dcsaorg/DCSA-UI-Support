@@ -60,7 +60,7 @@ public class TimestampDefinitionIT {
             .isMilesToDestinationRelevant(false)
             .providedInStandard("jit1_1")
             .facilityTypeCode("BRTH")
-            .negotiationCycle(new NegotiationCycleTO("T-Towage (Outbound)", "Towage (Outbound)"))
+            .negotiationCycle(new NegotiationCycleTO("T-Towage (Outbound)", "Towage (Outbound)", 10))
             .publisherPattern(
                 Set.of(
                         new PublisherPatternTO("TWG2ATH", "TWG", "ATH"),
