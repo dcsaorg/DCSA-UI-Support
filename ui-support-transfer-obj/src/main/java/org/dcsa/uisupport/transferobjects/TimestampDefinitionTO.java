@@ -3,7 +3,6 @@ package org.dcsa.uisupport.transferobjects;
 import lombok.Builder;
 import org.dcsa.uisupport.transferobjects.enums.LocationRequirement;
 
-import javax.persistence.Column;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
@@ -45,6 +44,8 @@ public record TimestampDefinitionTO(
   String acceptTimestampDefinition,
 
   String rejectTimestampDefinition,
+
+  String implicitVariantOf,
 
   Set<PublisherPatternTO> publisherPattern
 ) {
