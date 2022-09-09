@@ -2,6 +2,7 @@ package org.dcsa.uisupport.transferobjects;
 
 public record NegotiationCycleTO(
     String cycleKey,
-    String cycleName
+    String cycleName,
+    int displayOrder
 ) {
 }
