@@ -35,8 +35,8 @@ public class JITPortVisitUIContext {
   @Column(name = "vessel_draft")
   private Float vesselDraft;
 
-  @Column(name = "miles_remaining_to_destination")
-  private Float milesRemainingToDestination;
+  @Column(name = "miles_to_destination_port")
+  private Float milesToDestinationPort;
 
   @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "port_visit_id")
