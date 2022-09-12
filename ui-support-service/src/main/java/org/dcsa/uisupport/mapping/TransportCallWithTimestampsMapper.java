@@ -20,7 +20,7 @@ public class TransportCallWithTimestampsMapper {
       .omitCreatedDateTime(src.getOmitCreatedDateTime())
       .latestEventCreatedDateTime(src.getLatestEventCreatedDateTime())
       .vesselDraft(src.getVesselDraft())
-      .milesToDestinationPort(src.getMilesRemainingToDestination())
+      .milesToDestinationPort(src.getMilesToDestinationPort())
       .build();
   }
 }
