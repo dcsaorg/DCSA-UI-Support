@@ -26,10 +26,10 @@ public class UiVesselService {
   private final CarrierRepository carrierRepository;
   private final VesselMapper vesselMapper;
 
-  public PagedResult<TransportCallVesselTO> findAllRealVessels(Cursor cursor) {
+  public PagedResult<UISupportVesselTO> findAllRealVessels(Cursor cursor) {
     return new PagedResult<>(
       vesselRepository.findAllByIsDummyIsFalse(cursor.toPageRequest()),
-      vesselMapper::toTO
+      vesselMapper::toUISupportVesselTO
     );
   }
 
