@@ -29,7 +29,7 @@ public class VesselController {
 
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
-  public List<TransportCallVesselTO> getAll(@RequestParam(required = false, defaultValue = "100") Integer limit,
+  public List<UISupportVesselTO> getAll(@RequestParam(required = false, defaultValue = "100") Integer limit,
                                             HttpServletRequest request,
                                             HttpServletResponse response
                                ) {
@@ -41,7 +41,7 @@ public class VesselController {
         new CursorDefaults(limit, new Cursor.SortBy(Sort.Direction.DESC, Vessel_.VESSEL_IM_ONUMBER)));
 
 
-    PagedResult<TransportCallVesselTO> result = uiVesselService.findAllRealVessels(c);
+    PagedResult<UISupportVesselTO> result = uiVesselService.findAllRealVessels(c);
     paginator.setPageHeaders(request, response, c, result);
     return result.content();
   }
