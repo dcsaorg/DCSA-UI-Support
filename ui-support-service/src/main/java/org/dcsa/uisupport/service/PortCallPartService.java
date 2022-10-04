@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.dcsa.uisupport.mapping.PortCallPartMapper;
 import org.dcsa.uisupport.persistence.repository.PortCallPartRepository;
 import org.dcsa.uisupport.transferobjects.PortCallPartTO;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +15,7 @@ public class PortCallPartService {
   private final PortCallPartMapper portCallPartMapper;
 
   public List<PortCallPartTO> findAll() {
-    return portCallPartRepository.findAll(Sort.by("displayOrder")).stream()
+    return portCallPartRepository.findAllByOrderByDisplayOrderAsc().stream()
       .map(portCallPartMapper::toTO)
       .toList();
   }
