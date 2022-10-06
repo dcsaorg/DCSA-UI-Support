@@ -57,7 +57,7 @@ public class TimestampExportService {
   }
 
   private static String computeNegotiationSequenceID(TransportCall transportCall, TimestampDefinitionTO timestampDefinition) {
-    return String.valueOf(transportCall.getId()) + '-' + timestampDefinition.negotiationCycle();
+    return String.valueOf(transportCall.getId()) + '-' + timestampDefinition.negotiationCycle().cycleKey();
   }
 
 
