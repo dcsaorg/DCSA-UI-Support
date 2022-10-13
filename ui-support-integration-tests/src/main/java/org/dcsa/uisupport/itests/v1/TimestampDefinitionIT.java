@@ -56,6 +56,7 @@ public class TimestampDefinitionIT {
             .portCallPart("Port Departure Execution")
             .eventLocationRequirement(LocationRequirement.REQUIRED)
             .isTerminalNeeded(true)
+            .isVesselDraftRelevant(false)
             .vesselPositionRequirement(LocationRequirement.EXCLUDED)
             .isMilesToDestinationRelevant(false)
             .providedInStandard("jit1_1")

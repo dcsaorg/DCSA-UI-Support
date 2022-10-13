@@ -33,6 +33,8 @@ public record TimestampDefinitionTO(
 
   Boolean isTerminalNeeded,
 
+  Boolean isVesselDraftRelevant,
+
   LocationRequirement vesselPositionRequirement,
 
   NegotiationCycleTO negotiationCycle,

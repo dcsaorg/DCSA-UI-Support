@@ -91,7 +91,6 @@ public class UiTransportCallService {
     TransportCall entityToSave = TransportCall.builder()
       .transportCallReference(UUID.randomUUID().toString())
       .transportCallSequenceNumber(Objects.requireNonNullElse(transportCallTO.transportCallSequenceNumber(), 1))
-      .facility(null) // Go through location to find facility,
       .facilityTypeCode(enumMappers.facilityTypeCodeToDao(transportCallTO.facilityTypeCode()))
       .location(location)
       .modeOfTransportCode(enumMappers.modeOfTransportToDao(transportCallTO.modeOfTransport()).getCode().toString())
