@@ -1,6 +1,7 @@
 package org.dcsa.uisupport.service;
 
 import lombok.RequiredArgsConstructor;
+import org.dcsa.jit.mapping.EnumMappers;
 import org.dcsa.jit.mapping.OperationsEventMapper;
 import org.dcsa.jit.persistence.entity.*;
 import org.dcsa.jit.persistence.repository.TimestampInfoRepository;
@@ -12,7 +13,7 @@ import org.dcsa.skernel.domain.persistence.entity.Location_;
 import org.dcsa.uisupport.mapping.TimestampDefinitionMapper;
 import org.dcsa.uisupport.transferobjects.TimestampDefinitionTO;
 import org.dcsa.uisupport.transferobjects.TimestampInfoTO;
-import org.dcsa.uisupport.transferobjects.enums.EventDeliveryStatus;
+import org.dcsa.jit.transferobjects.enums.DeliveryStatus;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,8 @@ public class TimestampInfoService {
   private final TimestampInfoRepository timestampInfoRepository;
   private final TimestampDefinitionMapper timestampDefinitionMapper;
   private final OperationsEventMapper operationsEventMapper;
+  private final EnumMappers enumMappers;
+
   public List<TimestampInfoTO> findAll(String portVisitID, String negotiationCycle, String facilitySMDGCode, String portCallPart) {
 
     return timestampInfoRepository
@@ -36,20 +39,13 @@ public class TimestampInfoService {
         .stream()
         .map(
             opsEventTimestampDefinition -> {
-              EventDeliveryStatus eventDeliveryStatus;
-              if (opsEventTimestampDefinition.getPendingEvents() != null && !opsEventTimestampDefinition.getPendingEvents().isEmpty()) {
-                boolean deliveryAttempted = opsEventTimestampDefinition.getPendingEvents().stream()
-                  .anyMatch(e -> e.getLastAttemptDateTime() != null);
-                eventDeliveryStatus =  deliveryAttempted ? EventDeliveryStatus.ATTEMPTED_DELIVERY : EventDeliveryStatus.PENDING_DELIVERY;
-              } else if (opsEventTimestampDefinition.getUnmappedEvent() != null) {
-                eventDeliveryStatus = EventDeliveryStatus.PENDING_DELIVERY;
-              } else {
-                eventDeliveryStatus = EventDeliveryStatus.DELIVERY_FINISHED;
+              DeliveryStatus deliveryStatus = DeliveryStatus.DELIVERY_FINISHED;
+              if (opsEventTimestampDefinition.getEventSyncState() != null) {
+                deliveryStatus = enumMappers.deliveryStatusToTO(opsEventTimestampDefinition.getEventSyncState().getDeliveryStatus());
               }
-
               OperationsEventTO operationsEventTO = operationsEventMapper.toTO(opsEventTimestampDefinition.getOperationsEvent());
               TimestampDefinitionTO timestampDefinitionTO = timestampDefinitionMapper.toTO(opsEventTimestampDefinition.getTimestampDefinition());
-              return TimestampInfoTO.builder().operationsEventTO(operationsEventTO).timestampDefinitionTO(timestampDefinitionTO).eventDeliveryStatus(eventDeliveryStatus).build();
+              return TimestampInfoTO.builder().operationsEventTO(operationsEventTO).timestampDefinitionTO(timestampDefinitionTO).eventDeliveryStatus(deliveryStatus).build();
             })
         .toList();
   }
