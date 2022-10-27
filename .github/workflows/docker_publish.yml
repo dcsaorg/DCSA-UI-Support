@@ -6,9 +6,9 @@ name: Docker
 # documentation.
 
 on:
-  create:
-    tags:
-      - v*
+  release:
+    types: [ created ]
+
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -43,8 +43,32 @@ jobs:
           repositories: '[{ "id": "github", "name": "DCSA Backend repo", "url": "https://maven.pkg.github.com/dcsaorg/DCSA-Core", "releases": { "enabled": "true" }, "snapshots": { "enabled": "true" } }]'
           servers: '[{ "id": "github", "username": "${{ secrets.DCSA_USER }}", "password": "${{ secrets.DCSA_PACKAGES_PAT }}" }]'
 
+      - name: Get changelist from pom.xml
+        id: get-changelist
+        uses: mavrosxristoforos/get-xml-info@1.0
+        with:
+          xml-file: 'pom.xml'
+          xpath: '//*[local-name()="changelist"]'
+
+      - name: Get version from pom.xml
+        id: get-version
+        run: echo version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) >> $GITHUB_OUTPUT
+
+      - name: Confirm RELEASE Version
+        run: |
+          IFS='-'
+          read -ra PROJ_TAG <<<"${{ steps.get-version.outputs.version }}"
+
+          if [[ "${{ steps.get-changelist.outputs.info }}" == "-RELEASE" &&  "${PROJ_TAG[-1]}" == "RELEASE" ]];
+          then
+            echo "Version is RELEASE"
+          else
+            echo "The Version is not RELEASE"
+            exit 1
+          fi
+
       - name: maven build
-        run: mvn -B package --file pom.xml
+        run: mvn -B package -Dchangelist=-RELEASE
 
 
       # Build and push Docker image
