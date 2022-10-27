@@ -32,7 +32,7 @@ server:
   # UI Support runs on 9091 by default because it is needed in parallel with JIT
   # (which uses 9090)
   port: 9091
-  servlet.context-path: /v1
+  servlet.context-path: /ui-support/v1
   error:
     include-binding-errors: on_param
     include-message: always

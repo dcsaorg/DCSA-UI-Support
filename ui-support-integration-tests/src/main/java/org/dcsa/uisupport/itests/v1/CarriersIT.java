@@ -23,7 +23,7 @@ public class CarriersIT {
   public void testGetCarriers() {
     List<CarrierTO> carriers = given()
       .contentType("application/json")
-      .get("/v1/unofficial/carriers")
+      .get("/ui-support/v1/unofficial/carriers")
       .then()
       .assertThat()
       .statusCode(200)

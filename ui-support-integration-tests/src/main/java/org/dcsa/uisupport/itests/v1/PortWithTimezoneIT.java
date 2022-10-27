@@ -23,7 +23,7 @@ public class PortWithTimezoneIT {
   public void testGetPorts() {
     List<PortWithTimezoneTO> ports = given()
       .contentType("application/json")
-      .get("/v1/unofficial/ports")
+      .get("/ui-support/v1/unofficial/ports")
       .then()
       .assertThat()
       .statusCode(200)

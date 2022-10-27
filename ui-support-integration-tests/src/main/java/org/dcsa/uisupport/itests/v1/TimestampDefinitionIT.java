@@ -29,7 +29,7 @@ public class TimestampDefinitionIT {
     List<TimestampDefinitionTO> timestampDefinitions =
         given()
             .contentType("application/json")
-            .get("/v1/unofficial/timestamp-definitions")
+            .get("/ui-support/v1/unofficial/timestamp-definitions")
             .then()
             .assertThat()
             .statusCode(200)
