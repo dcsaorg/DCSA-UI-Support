@@ -26,7 +26,7 @@ public class TerminalsIT {
     List<TerminalTO> terminals = given()
       .contentType("application/json")
       .queryParam("UNLocationCode", "NLRTM")
-      .get("/v1/unofficial/terminals")
+      .get("/ui-support/v1/unofficial/terminals")
       .then()
       .assertThat()
       .statusCode(200)
