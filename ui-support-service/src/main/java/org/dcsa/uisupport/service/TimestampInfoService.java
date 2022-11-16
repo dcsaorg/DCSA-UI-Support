@@ -6,14 +6,16 @@ import org.dcsa.jit.mapping.OperationsEventMapper;
 import org.dcsa.jit.persistence.entity.*;
 import org.dcsa.jit.persistence.repository.TimestampInfoRepository;
 import org.dcsa.jit.transferobjects.OperationsEventTO;
+import org.dcsa.jit.transferobjects.enums.DeliveryStatus;
 import org.dcsa.skernel.domain.persistence.entity.Facility;
 import org.dcsa.skernel.domain.persistence.entity.Facility_;
 import org.dcsa.skernel.domain.persistence.entity.Location;
 import org.dcsa.skernel.domain.persistence.entity.Location_;
+import org.dcsa.skernel.infrastructure.pagination.PagedResult;
 import org.dcsa.uisupport.mapping.TimestampDefinitionMapper;
 import org.dcsa.uisupport.transferobjects.TimestampDefinitionTO;
 import org.dcsa.uisupport.transferobjects.TimestampInfoTO;
-import org.dcsa.jit.transferobjects.enums.DeliveryStatus;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -32,22 +34,18 @@ public class TimestampInfoService {
   private final OperationsEventMapper operationsEventMapper;
   private final EnumMappers enumMappers;
 
-  public List<TimestampInfoTO> findAll(String portVisitID, String negotiationCycle, String facilitySMDGCode, String portCallPart) {
-
-    return timestampInfoRepository
-        .findAll(fetchSpec(portVisitID, negotiationCycle, facilitySMDGCode, portCallPart))
-        .stream()
-        .map(
-            opsEventTimestampDefinition -> {
-              DeliveryStatus deliveryStatus = DeliveryStatus.DELIVERY_FINISHED;
-              if (opsEventTimestampDefinition.getEventSyncState() != null) {
-                deliveryStatus = enumMappers.deliveryStatusToTO(opsEventTimestampDefinition.getEventSyncState().getDeliveryStatus());
-              }
-              OperationsEventTO operationsEventTO = operationsEventMapper.toTO(opsEventTimestampDefinition.getOperationsEvent());
-              TimestampDefinitionTO timestampDefinitionTO = timestampDefinitionMapper.toTO(opsEventTimestampDefinition.getTimestampDefinition());
-              return TimestampInfoTO.builder().operationsEventTO(operationsEventTO).timestampDefinitionTO(timestampDefinitionTO).eventDeliveryStatus(deliveryStatus).build();
-            })
-        .toList();
+  public PagedResult<TimestampInfoTO> findAll(PageRequest pageRequest, String portVisitID, String negotiationCycle, String facilitySMDGCode, String portCallPart) {
+    return new PagedResult<>(timestampInfoRepository
+      .findAll(fetchSpec(portVisitID, negotiationCycle, facilitySMDGCode, portCallPart), pageRequest),
+      opsEventTimestampDefinition -> {
+        DeliveryStatus deliveryStatus = DeliveryStatus.DELIVERY_FINISHED;
+        if (opsEventTimestampDefinition.getEventSyncState() != null) {
+          deliveryStatus = enumMappers.deliveryStatusToTO(opsEventTimestampDefinition.getEventSyncState().getDeliveryStatus());
+        }
+        OperationsEventTO operationsEventTO = operationsEventMapper.toTO(opsEventTimestampDefinition.getOperationsEvent());
+        TimestampDefinitionTO timestampDefinitionTO = timestampDefinitionMapper.toTO(opsEventTimestampDefinition.getTimestampDefinition());
+        return TimestampInfoTO.builder().operationsEventTO(operationsEventTO).timestampDefinitionTO(timestampDefinitionTO).eventDeliveryStatus(deliveryStatus).build();
+      });
   }
 
   private static Specification<TimestampInfo> fetchSpec(
