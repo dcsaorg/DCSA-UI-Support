@@ -11,8 +11,7 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TerminalsIT {
 
@@ -25,13 +24,13 @@ public class TerminalsIT {
   public void testGetTerminals() {
     List<TerminalTO> terminals = given()
       .contentType("application/json")
-      .queryParam("UNLocationCode", "NLRTM")
+      .queryParam("UNLocationCode", "DEHAM")
       .get("/ui-support/v1/unofficial/terminals")
       .then()
       .assertThat()
       .statusCode(200)
       .contentType(ContentType.JSON)
-      .body("size()", greaterThanOrEqualTo(18))
+      .body("size()", greaterThanOrEqualTo(8))
       .extract()
       .body()
       .jsonPath().getList(".", TerminalTO.class)
@@ -39,8 +38,9 @@ public class TerminalsIT {
 
     assertTrue(terminals.stream().noneMatch(terminal -> terminal.facilitySMDGCode() == null));
 
-    // Just test a single carrier
-    TerminalTO apmTerminal = terminals.stream().filter(terminal -> terminal.facilitySMDGCode().equals("APM")).findFirst().get();
-    assertEquals("APM TERMINALS ROTTERDAM", apmTerminal.facilityName());
+    // Just test a single facility
+    TerminalTO terminal = terminals.stream().filter(t -> t.facilitySMDGCode().equals("EGH")).findFirst().orElse(null);
+    assertNotNull(terminal);
+    assertEquals("EUROGATE CONTAINER TERMINAL HAMBURG", terminal.facilityName());
   }
 }

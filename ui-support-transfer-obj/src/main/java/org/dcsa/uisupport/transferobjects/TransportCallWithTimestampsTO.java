@@ -25,7 +25,7 @@ public class TransportCallWithTimestampsTO {
 
   private OffsetDateTime latestEventCreatedDateTime;
 
-  private OffsetDateTime etaBerthDateTime;
+  private OffsetDateTime bestBerthArrivalEstimateDateTime;
 
   private OffsetDateTime atdBerthDateTime;
 
