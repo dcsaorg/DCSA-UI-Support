@@ -23,8 +23,8 @@ public class JITPortVisitUIContext {
   @Column(name = "latest_event_created_date_time")
   private OffsetDateTime latestEventCreatedDateTime;
 
-  @Column(name = "eta_berth_date_time")
-  private OffsetDateTime etaBerthDateTime;
+  @Column(name = "best_berth_estimate_date_time")
+  private OffsetDateTime bestBerthArrivalEstimateDateTime;
 
   @Column(name = "atd_berth_date_time")
   private OffsetDateTime atdBerthDateTime;
