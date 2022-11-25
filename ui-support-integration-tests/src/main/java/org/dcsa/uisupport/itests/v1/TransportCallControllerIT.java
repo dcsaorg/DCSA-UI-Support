@@ -4,7 +4,6 @@ import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.dcsa.jit.transferobjects.TransportCallTO;
 import org.dcsa.jit.transferobjects.TransportCallVesselTO;
-import org.dcsa.jit.transferobjects.enums.FacilityCodeListProvider;
 import org.dcsa.jit.transferobjects.enums.ModeOfTransport;
 import org.dcsa.uisupport.itests.config.RestAssuredConfigurator;
 import org.dcsa.uisupport.transferobjects.TransportCallWithTimestampsTO;
