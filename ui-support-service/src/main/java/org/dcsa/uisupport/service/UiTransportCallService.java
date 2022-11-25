@@ -4,27 +4,25 @@ import lombok.RequiredArgsConstructor;
 import org.dcsa.jit.mapping.EnumMappers;
 import org.dcsa.jit.mapping.TransportCallMapper;
 import org.dcsa.jit.persistence.entity.*;
-import org.dcsa.jit.persistence.repository.FacilityRepository;
-import org.dcsa.jit.persistence.repository.LocationRepository;
 import org.dcsa.jit.service.ServiceService;
 import org.dcsa.jit.service.TransportCallService;
 import org.dcsa.jit.service.VesselService;
 import org.dcsa.jit.transferobjects.TransportCallTO;
 import org.dcsa.skernel.domain.persistence.entity.Facility;
-import org.dcsa.skernel.domain.persistence.entity.Facility_;
 import org.dcsa.skernel.domain.persistence.entity.Location;
 import org.dcsa.skernel.domain.persistence.entity.Location_;
+import org.dcsa.skernel.domain.persistence.repository.LocationRepository;
 import org.dcsa.skernel.errors.exceptions.ConcreteRequestErrorMessageException;
 import org.dcsa.uisupport.mapping.TransportCallWithTimestampsMapper;
 import org.dcsa.uisupport.persistence.entity.JITPortVisitUIContext;
 import org.dcsa.uisupport.persistence.entity.JITPortVisitUIContext_;
 import org.dcsa.uisupport.persistence.repository.JITPortVisitUIContextRepository;
+import org.dcsa.uisupport.persistence.repository.UiFacilityRepository;
 import org.dcsa.uisupport.transferobjects.TransportCallWithTimestampsTO;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -42,7 +40,7 @@ public class UiTransportCallService {
   private final VesselService vesselService;
   private final TransportCallService transportCallService;
   private final LocationRepository locationRepository;
-  private final FacilityRepository facilityRepository;
+  private final UiFacilityRepository facilityRepository;
   private final JITPortVisitUIContextRepository jitPortVisitUIContextRepository;
 
   @Transactional
