@@ -2,13 +2,12 @@ package org.dcsa.uisupport.controller;
 
 import lombok.AllArgsConstructor;
 import org.dcsa.jit.persistence.entity.Vessel_;
-import org.dcsa.jit.transferobjects.TransportCallVesselTO;
 import org.dcsa.jit.transferobjects.UISupportVesselTO;
-import org.dcsa.uisupport.service.UiVesselService;
 import org.dcsa.skernel.infrastructure.pagination.Cursor;
 import org.dcsa.skernel.infrastructure.pagination.CursorDefaults;
 import org.dcsa.skernel.infrastructure.pagination.PagedResult;
 import org.dcsa.skernel.infrastructure.pagination.Paginator;
+import org.dcsa.uisupport.service.UiVesselService;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
