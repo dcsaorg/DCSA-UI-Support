@@ -1,8 +1,8 @@
 package org.dcsa.uisupport.service;
 
 import lombok.RequiredArgsConstructor;
+import org.dcsa.skernel.domain.persistence.repository.CarrierRepository;
 import org.dcsa.uisupport.mapping.CarrierMapper;
-import org.dcsa.jit.persistence.repository.CarrierRepository;
 import org.dcsa.uisupport.transferobjects.CarrierTO;
 import org.springframework.stereotype.Service;
 

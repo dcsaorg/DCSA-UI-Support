@@ -8,10 +8,10 @@ import org.dcsa.jit.transferobjects.TransportCallVesselTO;
 import org.dcsa.jit.transferobjects.UISupportVesselTO;
 import org.dcsa.jit.transferobjects.enums.CarrierCodeListProvider;
 import org.dcsa.skernel.domain.persistence.entity.Carrier;
+import org.dcsa.skernel.domain.persistence.repository.CarrierRepository;
 import org.dcsa.skernel.errors.exceptions.ConcreteRequestErrorMessageException;
 import org.dcsa.skernel.infrastructure.pagination.Cursor;
 import org.dcsa.skernel.infrastructure.pagination.PagedResult;
-import org.dcsa.jit.persistence.repository.CarrierRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -5,7 +5,6 @@ import org.apache.poi.ss.usermodel.*;
 import org.dcsa.jit.transferobjects.*;
 import org.dcsa.jit.transferobjects.enums.DCSAResponsibleAgencyCode;
 import org.dcsa.jit.transferobjects.enums.FacilityTypeCodeOPR;
-import org.dcsa.skernel.domain.persistence.entity.Location;
 import org.dcsa.skernel.infrastructure.transferobject.LocationTO;
 import org.dcsa.uisupport.service.TimestampExportService;
 import org.dcsa.uisupport.transferobjects.TimestampDefinitionTO;
