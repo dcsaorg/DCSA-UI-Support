@@ -3,7 +3,7 @@ package org.dcsa.uisupport.persistence.entity;
 import lombok.*;
 import org.dcsa.jit.persistence.entity.enums.PublisherRole;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Data
 @Builder

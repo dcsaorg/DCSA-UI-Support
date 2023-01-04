@@ -44,11 +44,11 @@ public class TimestampExportController {
     .column("Publisher Name", TimestampExportTO::operationsEvent, OperationsEventTO::publisher, PartyTO::partyName)
     .column("Vessel Name", TimestampExportTO::operationsEvent, OperationsEventTO::transportCall, TransportCallTO::vessel, TransportCallVesselTO::vesselName)
     .column("Vessel IMO", TimestampExportTO::operationsEvent, OperationsEventTO::transportCall, TransportCallTO::vessel, v -> Integer.parseInt(v.vesselIMONumber()))
-    .column("Vessel location lat", TimestampExportTO::operationsEvent, OperationsEventTO::vesselPosition, cast(LocationTO.GeoLocationTO.class), LocationTO.GeoLocationTO::latitude)
-    .column("Vessel location long", TimestampExportTO::operationsEvent, OperationsEventTO::vesselPosition, cast(LocationTO.GeoLocationTO.class), LocationTO.GeoLocationTO::longitude)
+    .column("Vessel location lat", TimestampExportTO::operationsEvent, OperationsEventTO::vesselPosition, LocationTO::latitude)
+    .column("Vessel location long", TimestampExportTO::operationsEvent, OperationsEventTO::vesselPosition, LocationTO::longitude)
     .column("Carrier Import Voyage Number", TimestampExportTO::operationsEvent, OperationsEventTO::transportCall, TransportCallTO::importVoyageNumber)
     .column("Carrier Export Voyage Number", TimestampExportTO::operationsEvent, OperationsEventTO::transportCall, TransportCallTO::exportVoyageNumber)
-    .column("Terminal Code", TimestampExportTO::operationsEvent, OperationsEventTO::transportCall, TransportCallTO::location, cast(LocationTO.FacilityLocationTO.class), LocationTO.FacilityLocationTO::facilityCode)
+    .column("Terminal Code", TimestampExportTO::operationsEvent, OperationsEventTO::transportCall, TransportCallTO::location, LocationTO::facilityCode)
     .column("Facility type code", TimestampExportTO::operationsEvent, OperationsEventTO::facilityTypeCode)
     .column("Port Call Service type code", TimestampExportTO::operationsEvent, oe -> mapOrDefault(oe, OperationsEventTO::portCallServiceTypeCode, "<null>"))
     .column("Event Classifier code", TimestampExportTO::operationsEvent, OperationsEventTO::eventClassifierCode)
@@ -63,7 +63,7 @@ public class TimestampExportController {
     .column("Event Message", TimestampExportTO::timestampDefinition, TimestampDefinitionTO::timestampTypeName)
     .column("Event Timestamp (port local TZ)", timestampExport -> asLocalDateTime(timestampExport.operationsEvent().eventDateTime(),  timestampExport.timezone()))
     .column("Event created date time (port local TZ)", timestampExport -> asLocalDateTime(timestampExport.operationsEvent().eventCreatedDateTime(), timestampExport.timezone()))
-    .column("Port (UN Location Code)", TimestampExportTO::operationsEvent, OperationsEventTO::transportCall, TransportCallTO::location, this::unLocationCode)
+    .column("Port (UN Location Code)", TimestampExportTO::operationsEvent, OperationsEventTO::transportCall, TransportCallTO::location, LocationTO::UNLocationCode)
     .column("Port Timezone", TimestampExportTO::timezone)
     .column("Delay Reason Code", TimestampExportTO::operationsEvent, OperationsEventTO::delayReasonCode)
     .column("Negotiation Sequence ID", TimestampExportTO::negotiationSequenceID)
@@ -82,20 +82,6 @@ public class TimestampExportController {
       );
     })
     .build();
-
-  private <T> Function<?, T> cast(Class<T> clazz) {
-    return v -> clazz.isInstance(v) ? clazz.cast(v) : null;
-  }
-
-  private String unLocationCode(LocationTO locationTO) {
-    if (locationTO instanceof LocationTO.UNLocationLocationTO unloc) {
-      return unloc.UNLocationCode();
-    }
-    if (locationTO instanceof LocationTO.FacilityLocationTO fl) {
-      return fl.UNLocationCode();
-    }
-    return null;
-  }
 
   private boolean isBerthRelatedTimestamp(OperationsEventTO oe) {
     return oe.facilityTypeCode() == FacilityTypeCodeOPR.BRTH;

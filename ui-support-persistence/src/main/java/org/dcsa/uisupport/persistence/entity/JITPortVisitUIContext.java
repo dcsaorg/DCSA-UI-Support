@@ -3,7 +3,7 @@ package org.dcsa.uisupport.persistence.entity;
 import lombok.*;
 import org.dcsa.jit.persistence.entity.TransportCall;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 

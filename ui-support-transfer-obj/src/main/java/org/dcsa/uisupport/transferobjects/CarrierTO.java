@@ -2,7 +2,7 @@ package org.dcsa.uisupport.transferobjects;
 
 import lombok.Builder;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 import java.util.UUID;
 
 public record CarrierTO(

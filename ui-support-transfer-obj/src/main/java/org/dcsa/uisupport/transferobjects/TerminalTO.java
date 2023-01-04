@@ -1,9 +1,8 @@
 package org.dcsa.uisupport.transferobjects;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 
 public record TerminalTO(
   @Size(max = 100)

@@ -14,7 +14,7 @@ import org.dcsa.uisupport.transferobjects.TimestampExportTO;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;

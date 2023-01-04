@@ -1,6 +1,6 @@
 package org.dcsa.uisupport.transferobjects;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 
 public record PublisherPatternTO(
   String id,
