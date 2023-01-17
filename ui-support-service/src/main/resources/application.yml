@@ -1,7 +1,6 @@
 dcsa:
   specification:
-    # This is not an official DCSA standard
-    version: unofficial-API
+    version: 'N/A'
 
 spring:
   application:
