@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.dcsa</groupId>
 		<artifactId>dcsa-bom</artifactId>
-		<version>1.5-SNAPSHOT</version>
+		<version>1.6-SNAPSHOT</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<name>DCSA-UI-Support</name>
@@ -17,13 +17,13 @@
 
 	<properties>
 		<!-- Define DCSA-UI-SUPPORT version -->
-		<revision>0.0.2</revision>
+		<revision>1.2.0-beta1-rc4</revision>
 		<sha1/>
 		<changelist>-SNAPSHOT</changelist>
 		<!-- End: Define DCSA-SUPPORT version -->
 
 		<!-- Define Shared Kernel version -->
-		<dcsa.shared-kernel.version>0.3.0</dcsa.shared-kernel.version>
+		<dcsa.shared-kernel.version>0.4.0</dcsa.shared-kernel.version>
 		<dcsa.shared-kernel.tag/>
 		<dcsa.shared-kernel.artifacttype>-SNAPSHOT</dcsa.shared-kernel.artifacttype>
 		<shared-kernel.version>${dcsa.shared-kernel.version}${dcsa.shared-kernel.tag}${dcsa.shared-kernel.artifacttype}
@@ -31,7 +31,7 @@
 		<!-- End: Define Shared kernel version -->
 
 		<!-- Define Shared Kernel version -->
-		<dcsa.jit.version>1.2.0-beta1-rc3</dcsa.jit.version>
+		<dcsa.jit.version>1.2.0-beta1-rc4</dcsa.jit.version>
 		<dcsa.jit.tag/>
 		<dcsa.jit.artifacttype>-SNAPSHOT</dcsa.jit.artifacttype>
 		<jit.version>${dcsa.jit.version}${dcsa.jit.tag}${dcsa.jit.artifacttype}</jit.version>
